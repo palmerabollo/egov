@@ -1,0 +1,14 @@
+language: node_js
+sudo: false
+node_js:
+  - "10"
+script:
+  - "npm run test"
+  - "npm run lint"
+cache:
+  directories:
+    - node_modules
+    - typings
+notifications:
+  email:
+    - palmerabollo@gmail.com
