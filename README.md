@@ -1,5 +1,7 @@
 # eGov España - API de acceso a datos púbicos
 
+[![Build Status](https://travis-ci.org/palmerabollo/egov.svg?branch=master)](https://travis-ci.org/palmerabollo/egov)
+
 ¿Te entra la risa floja cuando oyes hablar de transformación digital? ¿Ya no crees en promesas de datos abiertos? ¿Crees que está feo dilapidar dinero público en "portalitos"? Estás en el sitio adecuado.
 
 El plan es construir APIs decentes que consulten fuentes de datos públicas (por ejemplo, páginas web)  para poder utilizar los servicios de la administración de forma programática. Puedes [probar la demo real](https://bit.ly/egov-demo).

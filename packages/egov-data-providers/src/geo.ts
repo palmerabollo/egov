@@ -2,7 +2,7 @@
  * Geographical utils.
  */
 export class Geo {
-  private static EARTH_RADIUS = 6371;
+  static EARTH_RADIUS = 6371;
 
   static distance(lat1: number, lon1: number, lat2: number, lon2: number): number {
     const dLat = this.deg2rad(lat2 - lat1);
