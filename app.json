@@ -1,0 +1,6 @@
+{
+    "name": "eGov Demo on Heroku",
+    "repository": "https://github.com/palmerabollo/egov",
+    "keywords": ["node", "egov", "heroku"],
+    "image": "heroku/nodejs"
+  }

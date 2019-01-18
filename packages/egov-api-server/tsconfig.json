@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "suppressImplicitAnyIndexErrors": false,
+    "outDir": "./lib",
+    "preserveConstEnums": true,
+    "pretty": true,
+    "removeComments": true,
+    "skipLibCheck": true,
+    "target": "es2018",
+    "sourceMap": true,
+    "esModuleInterop": true, // https://github.com/apollographql/apollo-server/issues/1189#issuecomment-398847024
+    "lib": [
+      "es2018",
+      "esnext" // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/18557#issuecomment-391099501
+    ]
+  },
+  "filesGlob": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "lib"
+  ],
+  "atom": {
+    "rewriteTsconfig": false
+  }
+}

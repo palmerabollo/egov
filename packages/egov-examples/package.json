@@ -1,0 +1,53 @@
+{
+  "name": "@egov/examples",
+  "private": true,
+  "version": "1.0.0",
+  "description": "eGov Examples",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "npm run clean && npm run compile",
+    "clean": "rm -fR ./lib",
+    "compile": "tsc",
+    "lint": "tslint './src/**/*.ts'",
+    "prepublish": "npm run build",
+    "start": "npm run build && node lib/index",
+    "test": "npm run build && mocha -R spec 'lib/**/*.spec.js'",
+    "watch": "tsc -w"
+  },
+  "bin": {
+    "telco": "./bin/telco"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": ">=10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/palmerabollo/egov"
+  },
+  "keywords": [
+    "sdk"
+  ],
+  "author": "Guido García (@palmerabollo)",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "iconv-lite": "^0.4.24",
+    "lodash": "^4.17.11",
+    "readline-sync": "^1.4.9",
+    "string-similarity": "^3.0.0",
+    "@egov/data-providers": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/lodash": "^4.14.119",
+    "@types/readline-sync": "^1.4.3",
+    "@types/string-similarity": "^1.2.0",
+    "tslint": "^4.5.1",
+    "typescript": "^3.2.4"
+  }
+}
