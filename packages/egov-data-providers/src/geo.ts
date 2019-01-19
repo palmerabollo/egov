@@ -2,9 +2,9 @@
  * Geographical utils.
  */
 export class Geo {
-  static EARTH_RADIUS = 6371;
+  public static EARTH_RADIUS = 6371;
 
-  static distance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  public static distance(lat1: number, lon1: number, lat2: number, lon2: number): number {
     const dLat = this.deg2rad(lat2 - lat1);
     const dLon = this.deg2rad(lon2 - lon1);
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +

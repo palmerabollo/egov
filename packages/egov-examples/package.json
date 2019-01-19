@@ -9,13 +9,12 @@
     "lib"
   ],
   "scripts": {
-    "build": "npm run clean && npm run compile",
-    "clean": "rm -fR ./lib",
-    "compile": "tsc",
-    "lint": "tslint './src/**/*.ts'",
+    "build": "tsc",
+    "clean": "rimraf ./lib",
+    "lint": "tslint -p .",
+    "prebuild": "npm run clean",
     "prepublish": "npm run build",
-    "start": "npm run build && node lib/index",
-    "test": "npm run build && mocha -R spec 'lib/**/*.spec.js'",
+    "test": "exit 0",
     "watch": "tsc -w"
   },
   "bin": {
@@ -30,30 +29,18 @@
     "url": "https://github.com/palmerabollo/egov"
   },
   "keywords": [
-    "sdk"
+    "egov", "examples"
   ],
   "author": "Guido García (@palmerabollo)",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "axios": "^0.18.0",
-    "iconv-lite": "^0.4.24",
-    "lodash": "^4.17.11",
     "readline-sync": "^1.4.9",
-    "string-similarity": "^3.0.0",
     "@egov/data-providers": "^1.0.0"
   },
   "devDependencies": {
-    "@types/axios": "^0.14.0",
-    "@types/lodash": "^4.14.119",
-    "@types/mocha": "^5.2.5",
     "@types/readline-sync": "^1.4.3",
-    "@types/string-similarity": "^1.2.0",
-    "chai": "^4.2.0",
-    "mocha": "^5.2.0",
-    "sinon": "^7.2.2",
-    "sinon-chai": "^3.3.0",
-    "ts-node": "^7.0.1",
-    "tslint": "^4.5.1",
+    "rimraf": "^2.6.3",
+    "tslint": "^5.11.0",
     "typescript": "^3.2.4"
   }
 }

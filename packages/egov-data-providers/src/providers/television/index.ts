@@ -1,7 +1,7 @@
 import * as axios from 'axios';
 import * as similarity from 'string-similarity';
 
-export interface TelevisionSignal {
+export type TelevisionSignal = {
   /**
    * Un múltiple digital es el conjunto de canales de televisión que se emiten en una misma frecuencia.
    */
@@ -14,7 +14,7 @@ export interface TelevisionSignal {
    * Canal (frecuencias). La frecuencia del múltiple digital varía en cada zona geográfica.
    */
   channel: string;
-}
+};
 
 interface IDigitalTelevisionService {
   findTelevisionSignals(placeName: string, postalCode: string): Promise<TelevisionSignal[]>;
@@ -24,9 +24,9 @@ interface IDigitalTelevisionService {
  * Based on televisiondigital.gob.es (web scraping, weak)
  */
 export class DigitalTelevisionService implements IDigitalTelevisionService {
-  BASE_URL_GEOPORTAL = 'http://www.televisiondigital.gob.es';
+  private BASE_URL_GEOPORTAL = 'http://www.televisiondigital.gob.es';
 
-  async findTelevisionSignals(placeName: string, postalCode: string): Promise<TelevisionSignal[]> {
+  public async findTelevisionSignals(placeName: string, postalCode: string): Promise<TelevisionSignal[]> {
     const requester = axios.default.create({
       baseURL: `${this.BASE_URL_GEOPORTAL}/ayuda-ciudadano/Paginas/buscador-frecuencias.aspx`,
       timeout: 10000
@@ -34,8 +34,8 @@ export class DigitalTelevisionService implements IDigitalTelevisionService {
 
     let response = await requester.request({
       params: {
-        cpRef: postalCode,
-        cp: postalCode
+        cp: postalCode,
+        cpRef: postalCode
       }
     });
 
@@ -48,18 +48,18 @@ export class DigitalTelevisionService implements IDigitalTelevisionService {
       // with a dropdown menu to choose the place. We choose the most similar one.
 
       // map: place -> id
-      const allPlaces = {};
+      const pagePlaces = {};
       const regexPlaces = new RegExp('<option \\w*?\\s?value="(.+?)">(.+?)</option>', 'g');
       let matchesPlaces = regexPlaces.exec(response.data);
 
       while (matchesPlaces) {
-        allPlaces[matchesPlaces[2]] = matchesPlaces[1];
+        pagePlaces[matchesPlaces[2]] = matchesPlaces[1];
         matchesPlaces = regexPlaces.exec(response.data);
       }
 
-      const matches = similarity.findBestMatch(placeName.toUpperCase(), Object.keys(allPlaces));
+      const places = similarity.findBestMatch(placeName.toUpperCase(), Object.keys(pagePlaces));
 
-      const id = allPlaces[matches.bestMatch.target];
+      const id = pagePlaces[places.bestMatch.target];
 
       response = await this.findSignalsByPlaceId(id, postalCode);
 
@@ -80,11 +80,13 @@ export class DigitalTelevisionService implements IDigitalTelevisionService {
     const signals: TelevisionSignal[] = [];
 
     while (matches) {
+      /* tslint:disable:object-literal-sort-keys */
       signals.push({
         multiple: matches[1],
         center: matches[2],
         channel: matches[3]
       });
+      /* tslint:enable:object-literal-sort-keys */
       matches = regexSignals.exec(response.data);
     }
 
@@ -99,8 +101,8 @@ export class DigitalTelevisionService implements IDigitalTelevisionService {
 
     const response = await requester.request({
       params: {
-        cpRef: postalCode,
         cp: postalCode,
+        cpRef: postalCode,
         p: placeId
       }
     });

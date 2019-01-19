@@ -1,21 +1,15 @@
+import { AntennaService, DigitalTelevisionService, NetworkService, NetworkType, PostalCodeService } from '@egov/data-providers';
+
 import * as readline from 'readline-sync';
 
-import {
-  PostalCodeService,
-  AntennaService, NetworkService, NetworkType,
-  DigitalTelevisionService
-} from '@egov/data-providers';
-
-run();
-
-async function run() {
+(async function run() {
   const inputCity = readline.question('Place name: ');
 
   const postalCodeService = new PostalCodeService();
   const places = await postalCodeService.findByPlaceName(inputCity, 0.85);
 
   if (places.length === 0) {
-    console.log(`Place ${inputCity} not found on geonames database.`);
+    console.log(`Place ${inputCity} not found.`);
     process.exit(1);
   }
 
@@ -32,9 +26,9 @@ async function run() {
   const is4Gat800 = await networkService.isNetworkAvailable(NetworkType.CELLULAR_4G_800MHZ, city);
   console.log('\n4G 800MHz');
   if (is4Gat800) {
-    console.log(`✅  4G (800MHz) coverage in ${city}`);
+    console.log(`4G @800MHz coverage in ${city}`);
   } else {
-    console.log(`❌  NO 4G (800MHz) coverage in ${city}`);
+    console.log(`NO 4G @800MHz coverage in ${city}`);
   }
 
   const antennaService = new AntennaService();
@@ -59,4 +53,4 @@ async function run() {
       console.log(`No TV signals found in the postal code ${place.postalCode}`);
     }
   }
-}
+})();
