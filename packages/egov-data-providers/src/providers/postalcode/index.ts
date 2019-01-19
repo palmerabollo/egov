@@ -1,9 +1,9 @@
-import * as path from 'path';
 import * as fs from 'fs';
-import * as similarity from 'string-similarity';
 import * as _ from 'lodash';
+import * as path from 'path';
+import * as similarity from 'string-similarity';
 
-export interface PostalCode {
+export type PostalCode = {
   /**
    * ISO country code, 2 chars
    */
@@ -37,7 +37,7 @@ export interface PostalCode {
    * accuracy of lat/lng from 1=estimated to 6=centroid
    */
   accuracy: Accuracy;
-}
+};
 
 export enum Accuracy {
   /**
@@ -55,7 +55,7 @@ export enum Accuracy {
   ACCURACY_4 = 4,
   ACCURACY_5 = 5,
   ACCURACY_6 = CENTROID
-};
+}
 
 interface IPostalCodeService {
   /**
@@ -82,6 +82,7 @@ export class PostalCodeService implements IPostalCodeService {
       .map(line => {
         const attributes = line.split('\t');
 
+        /* tslint:disable:object-literal-sort-keys */
         return {
           countryCode: attributes[0],
           postalCode: attributes[1],
@@ -97,15 +98,16 @@ export class PostalCodeService implements IPostalCodeService {
           // tricky typescript notation, see https://stackoverflow.com/a/42623905
           accuracy: Accuracy[`ACCURACY_${attributes[11]}` as keyof typeof Accuracy]
         };
+        /* tslint:enable:object-literal-sort-keys */
       });
   }
 
-  findByPostalCode(postalCode: string): Promise<PostalCode[]> {
+  public async findByPostalCode(postalCode: string): Promise<PostalCode[]> {
     const result = this.places.filter(place => place.postalCode === postalCode);
     return Promise.resolve(result);
   }
 
-  findByPlaceName(placeName: string, fuzzyness: number = 0.95): Promise<PostalCode[]> {
+  public async findByPlaceName(placeName: string, fuzzyness: number = 0.95): Promise<PostalCode[]> {
     const allPlaceNames = this.places
       .filter(place => place.adminCode3 !== '') // XXX Postal codes without adminCode3 are not reliable in geonames. Try to find why.
       .map(place => place.placeName);

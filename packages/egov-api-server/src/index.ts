@@ -1,10 +1,12 @@
 //
 // TODO this is just a quick & dirty proof of concept.
 //
+import * as egov from '@egov/data-providers';
+
+import { DataSource } from 'apollo-datasource';
 import { ApolloServer, gql } from 'apollo-server';
 
-import * as egov from '@egov/data-providers';
-import { DataSource } from 'apollo-datasource';
+import * as logops from 'logops';
 
 // XXX move type defs to an external file
 const typeDefs = gql`
@@ -120,6 +122,12 @@ const typeDefs = gql`
 `;
 
 const resolvers = {
+  PostalCode: {
+    radioInformation: async (parent, args, context) => {
+      context.postalCode = parent;
+      return {};
+    }
+  },
   Query: {
     postalCode: async (parent, args, context) => {
       const postalCodeService = context.dataSources.postalCodeService;
@@ -134,39 +142,33 @@ const resolvers = {
     },
     networks: async (parent, args, context) => {
       const networkService = context.dataSources.networkService;
-      const cellullar4G_800 = await networkService.isNetworkAvailable(egov.NetworkType.CELLULAR_4G_800MHZ, context.postalCode.placeName);
-      return Promise.resolve(cellullar4G_800 ? [egov.NetworkType.CELLULAR_4G_800MHZ] : []);
+      const cellullar4G800 = await networkService.isNetworkAvailable(egov.NetworkType.CELLULAR_4G_800MHZ, context.postalCode.placeName);
+      return Promise.resolve(cellullar4G800 ? [egov.NetworkType.CELLULAR_4G_800MHZ] : []);
     },
     televisionSignals: async (parent, args, context) => {
       const digitalTelevisionService = context.dataSources.digitalTelevisionService;
       return digitalTelevisionService.findTelevisionSignals(context.postalCode.placeName, context.postalCode.postalCode);
     }
-  },
-  PostalCode: {
-    radioInformation: async (parent, args, context) => {
-      context.postalCode = parent;
-      return {};
-    }
   }
 };
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  cacheControl: true,
   dataSources: () => ({
+    antennaService: new egov.AntennaService() as DataSource<any>,
     digitalTelevisionService: new egov.DigitalTelevisionService() as DataSource<any>,
     networkService: new egov.NetworkService() as DataSource<any>,
-    antennaService: new egov.AntennaService() as DataSource<any>,
     postalCodeService: new egov.PostalCodeService() as DataSource<any>
   }),
-  cacheControl: true,
-  tracing: process.env.NODE_ENV === 'development',
   formatError: (error: Error) => {
-    console.log(error);
+    logops.error(error);
     return error;
-  }
+  },
+  resolvers,
+  tracing: process.env.NODE_ENV === 'development',
+  typeDefs
 });
 
 server.listen(process.env.PORT || 4000, process.env.HOST || '0.0.0.0').then(({ url }) => {
-  console.log(`GraphQL eGov API server ready at ${url}`);
+  logops.debug(`GraphQL eGov API server ready at ${url}`);
 });

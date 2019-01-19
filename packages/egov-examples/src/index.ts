@@ -1,11 +1,6 @@
+import { AntennaService, DigitalTelevisionService, NetworkService, NetworkType, PostalCodeService } from '@egov/data-providers';
+
 import * as readline from 'readline-sync';
-
-import {
-  PostalCodeService,
-  AntennaService, NetworkService, NetworkType,
-  DigitalTelevisionService
-} from '@egov/data-providers';
-
 
 (async function run() {
   const inputCity = readline.question('Place name: ');
