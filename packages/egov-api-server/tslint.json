@@ -1,12 +1,12 @@
 {
   "extends": "tslint:recommended",
   "rules": {
-    "quotemark": [true, "single", "avoid-escape"],
-    "interface-name": [true, "always-prefix"],
     "arrow-parens": [true, "ban-single-arg-parens"],
-    "trailing-comma": [true, { "esSpecCompliant": true }],
+    "interface-name": [true, "always-prefix"],
     "interface-over-type-literal": false,
+    "max-classes-per-file": [true, 5],
     "max-line-length": [true, 140],
-    "max-classes-per-file": [true, 5]
+    "quotemark": [true, "single", "avoid-escape"],
+    "trailing-comma": [true, { "esSpecCompliant": true }]
   }
 }
