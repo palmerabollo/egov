@@ -4,15 +4,21 @@
 
 ¿Te entra la risa floja cuando oyes hablar de transformación digital? ¿Ya no crees en promesas de datos abiertos? ¿Crees que está feo dilapidar dinero público en "portalitos"? Estás en el sitio adecuado.
 
-El plan es construir APIs decentes que consulten fuentes de datos públicas (por ejemplo, páginas web)  para poder utilizar los servicios de la administración de forma programática. Puedes [probar la demo real](https://bit.ly/egov-demo).
+El plan es **construir APIs decentes que consulten fuentes de datos públicas** (por ejemplo, páginas web) para poder utilizar los servicios de la administración de forma programática.
 
-No voy a poder hacerlo sólo. **¡Colabora!**
+Prueba a consultar algunos ejemplos en una demo real (_puede tardar la primera petición_):
+* [Ubicación geográfica del código postal "09400"](https://bit.ly/egov-demo-1).
+* [Antenas de telefonía de Aranda de Duero](http://bit.ly/egov-demo-2).
+* [Señales de Televisión de Villadiego](http://bit.ly/egov-demo-3).
+* [Cobertura 4G a 800MHz en Aranda de Duero](http://bit.ly/egov-demo-4).
+
+Faltan muchos servicios por incluir y no voy a poder hacerlo solo. **¡Colabora!**
 
 # Organización del proyecto
 
-El proyecto cuenta con varios paquetes:
-- **packages/egov-api-server**: Servidor que expone un API [GraphQL](https://en.wikipedia.org/wiki/GraphQL) para acceder a los datos.
-- **packages/egov-data-providers**: Servicios de consulta que extraen datos de fuentes públicas.
+El proyecto se divide en varios paquetes:
+- **packages/egov-api-server**: Servidor que expone un API [GraphQL](https://en.wikipedia.org/wiki/GraphQL) para acceder a los datos públicos.
+- **packages/egov-data-providers**: Contiene los servicios de consulta que extraen datos de fuentes públicas. El `egov-api-server` utiliza este paquete.
 - **packages/egov-examples**: Ejemplos de uso programático de los servicios de consulta.
 
 ## egov-api-server
@@ -21,7 +27,7 @@ Servidor HTTP que expone un **API GraphQL para acceder a datos públicos reales*
 
 ![Example API UI](./docs/images/example-api-ui.png "Example API UI")
 
-Puedes consultar el [esquema de datos](./packages/egov-api-server/src/index.ts). Actualmente está centrado en datos de localizaciones geográficas y de servicios de telecomunicaciones disponibles en la zona (antenas, canales de televisión digital, redes disponibles).
+Puedes consultar el [esquema de datos](./packages/egov-api-server/src/index.ts). He empezado con datos de localizaciones geográficas y de servicios de telecomunicaciones disponibles en la zona (antenas, canales de televisión digital, redes disponibles).
 
 ### Instalación local
 
@@ -35,22 +41,22 @@ npm install
 
 Y ejecutarlo:
 ```
-npm run watch:api-server
+npm run start:api-server
 ```
 
-En http://localhost:4000 tendrás una interfaz de acceso al API GraphQL para ejecutar tus consultas.
+En http://localhost:4000 tendrás la interfaz web de acceso al API GraphQL para ejecutar tus consultas.
 
 ## egov-data-providers
 
-Servicios de consulta que extraen datos de fuentes públicas. Algunos servicios consultan datos cuando se solicitan (online) y otros utilizan datos locales (offline).
+Incluye la implementación de los proveedores de datos: servicios de consulta que extraen datos de fuentes públicas. Algunos servicios consultan datos cuando se solicitan (online) y otros utilizan datos locales (offline).
 
-Crear un servicio es muy sencillo. Actualmente están desarrollados los siguientes, y se aceptan pull requests con nuevos servicios.
+Crear un nuevo servicio es muy sencillo. Actualmente están desarrollados los siguientes. Se aceptan ideas en las _issues_ y _pull requests_ con nuevos servicios.
 
 | Servicio     | Origen de los datos   | Online  |
 |------------- | --------------------- | ------- |
 | Búsqueda de poblaciones y códigos postales<br><i>Categoría: General</i> | geonames.org | ❎<br><small>(file)</small> |
-| Servicio de localización de antenas de telefonía móvil<br><i>Categoría: Telco</i> | geoportal.minetur.gob.es | ✅<br><small>(api)</small >|
-| Servicio de comprobación de cobertura 4G a 800MHz<br><i>Categoría: Telco</i> | www.llega800.es | ✅<br><small>(api)</small> |
+| Localización de antenas de telefonía móvil<br><i>Categoría: Telco</i> | geoportal.minetur.gob.es | ✅<br><small>(api)</small >|
+| Comprobación de cobertura 4G a 800MHz<br><i>Categoría: Telco</i> | www.llega800.es | ✅<br><small>(api)</small> |
 | Señales de televisión por ubicación geográfica<br><i>Categoría: Telco</i> | www.televisiondigital.gob.es | ✅<br><small>(html)</small> |
 
 ## egov-examples
@@ -76,13 +82,11 @@ console.table(antennas, ['code', 'latitude', 'longitude']);
 // └─────────┴───────────────────────────────────┴───────────┴───────────┘
 ```
 
-
 # TODO
 
-- [ ] Comentárselo a 5-10 personas para ver qué opinan y recoger ideas.
+- [ ] Comentárselo a ~10 personas para ver qué opinan y recoger ideas.
 - [ ] Añadir guías de colaboración.
-- [ ] Tests para detectar cambios de estructura que hagan fallar los "scrapes".
-- [ ] Integrar CI/Travis.
+- [ ] Tests para detectar cambios de estructura html que hagan fallar los "scrapers".
 - [ ] Imagen Docker + publicar en npm registry para reducir curva de iniciación.
 - [ ] ...
 
