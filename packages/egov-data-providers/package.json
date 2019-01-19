@@ -10,13 +10,12 @@
   ],
   "scripts": {
     "assets": "cp -R assets/* lib",
-    "build": "npm run clean && npm run compile && npm run assets",
-    "clean": "rm -fR ./lib",
-    "compile": "tsc",
-    "lint": "tslint './src/**/*.ts'",
+    "build": "tsc && npm run assets",
+    "clean": "rimraf ./lib",
+    "lint": "tslint -p .",
+    "prebuild": "npm run clean",
     "prepublish": "npm run build",
-    "start": "npm run build && node lib/index",
-    "test": "npm run build && mocha -R spec 'lib/**/*.spec.js'",
+    "test": "jest --coverage --verbose --testEnvironment node",
     "watch": "tsc -w"
   },
   "engineStrict": true,
@@ -28,11 +27,20 @@
     "url": "https://github.com/palmerabollo/egov"
   },
   "keywords": [
+    "egov",
     "sdk",
     "data"
   ],
   "author": "Guido García (@palmerabollo)",
   "license": "AGPL-3.0-or-later",
+  "jest": {
+    "preset": "ts-jest",
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "test/tsconfig.json"
+      }
+    }
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "iconv-lite": "^0.4.24",
@@ -42,16 +50,14 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "@types/jest": "^23.3.13",
     "@types/lodash": "^4.14.119",
-    "@types/mocha": "^5.2.5",
     "@types/readline-sync": "^1.4.3",
     "@types/string-similarity": "^1.2.0",
-    "chai": "^4.2.0",
-    "mocha": "^5.2.0",
+    "jest": "^23.6.0",
     "nock": "^9.6.1",
-    "sinon": "^7.2.2",
-    "sinon-chai": "^3.3.0",
-    "ts-node": "^7.0.1",
+    "rimraf": "^2.6.3",
+    "ts-jest": "^23.10.5",
     "tslint": "^4.5.1",
     "typescript": "^3.2.4"
   }

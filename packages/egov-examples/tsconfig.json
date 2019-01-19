@@ -12,18 +12,18 @@
     "skipLibCheck": true,
     "target": "es2018",
     "sourceMap": true,
+    "experimentalDecorators": true,
     "lib": [
       "es2018"
     ]
   },
-  "filesGlob": [
-    "src/**/*.ts"
+  "include": [
+    "src/**/*",
+    "typings/**/*"
   ],
   "exclude": [
     "node_modules",
-    "lib"
-  ],
-  "atom": {
-    "rewriteTsconfig": false
-  }
+    "lib",
+    "**/*.spec.ts"
+  ]
 }
