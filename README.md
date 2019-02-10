@@ -52,12 +52,12 @@ Incluye la implementación de los proveedores de datos: servicios de consulta qu
 
 Crear un nuevo servicio es muy sencillo. Actualmente están desarrollados los siguientes. Se aceptan ideas en las _issues_ y _pull requests_ con nuevos servicios.
 
-| Servicio     | Origen de los datos   | Online  |
-|------------- | --------------------- | ------- |
-| Búsqueda de poblaciones y códigos postales<br><i>Categoría: General</i> | geonames.org | ❎<br><small>(file)</small> |
-| Localización de antenas de telefonía móvil<br><i>Categoría: Telco</i> | geoportal.minetur.gob.es | ✅<br><small>(api)</small >|
-| Comprobación de cobertura 4G a 800MHz<br><i>Categoría: Telco</i> | www.llega800.es | ✅<br><small>(api)</small> |
-| Señales de televisión por ubicación geográfica<br><i>Categoría: Telco</i> | www.televisiondigital.gob.es | ✅<br><small>(html)</small> |
+| Servicio     | Clase | Origen de los datos   | Online  |
+|------------- | ------| --------------------- | ------- |
+| Búsqueda de poblaciones y códigos postales<br><i>Categoría: General</i> | `PostalCodeService` | geonames.org | ❎<br><small>(file)</small> |
+| Localización de antenas de telefonía móvil<br><i>Categoría: Telco</i> | `AntennaService` | geoportal.minetur.gob.es | ✅<br><small>(api)</small >|
+| Comprobación de cobertura 4G a 800MHz<br><i>Categoría: Telco</i> | `NetworkService` | www.llega800.es | ✅<br><small>(api)</small> |
+| Señales de televisión por ubicación geográfica<br><i>Categoría: Telco</i> | `DigitalTelevisionService` | www.televisiondigital.gob.es | ✅<br><small>(html)</small> |
 
 ## egov-examples
 
@@ -84,7 +84,6 @@ console.table(antennas, ['code', 'latitude', 'longitude']);
 
 # TODO
 
-- [ ] Comentárselo a ~10 personas para ver qué opinan y recoger ideas.
 - [ ] Añadir guías de colaboración.
 - [ ] Tests para detectar cambios de estructura html que hagan fallar los "scrapers".
 - [ ] Imagen Docker + publicar en npm registry para reducir curva de iniciación.
