@@ -6,7 +6,7 @@
 
 El plan es **construir APIs decentes que consulten fuentes de datos públicas** (por ejemplo, páginas web) para poder utilizar los servicios de la administración de forma programática.
 
-Prueba a consultar algunos ejemplos en una demo real (_puede tardar la primera petición_):
+Prueba a consultar algunos ejemplos en una demo real:
 * [Ubicación geográfica del código postal "09400"](https://bit.ly/egov-demo-1).
 * [Antenas de telefonía de Aranda de Duero](http://bit.ly/egov-demo-2).
 * [Señales de Televisión de Villadiego](http://bit.ly/egov-demo-3).
@@ -84,6 +84,7 @@ console.table(antennas, ['code', 'latitude', 'longitude']);
 
 # TODO
 
+- [ ] Sitio web para el público general.
 - [ ] Añadir guías de colaboración.
 - [ ] Tests para detectar cambios de estructura html que hagan fallar los "scrapers".
 - [ ] Imagen Docker + publicar en npm registry para reducir curva de iniciación.
