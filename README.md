@@ -25,7 +25,7 @@ El proyecto se divide en varios paquetes:
 
 Servidor HTTP que expone un **API GraphQL para acceder a datos públicos reales** ([probar demo](https://bit.ly/egov-demo)). Está desarrollado en Node.js (TypeScript) con [Apollo GraphQL](https://www.apollographql.com/docs/) y es la forma más sencilla de acceder a los datos.
 
-![Example API UI](./docs/images/example-api-ui.png "Example API UI")
+![Example API UI](./images/example-api-ui.png "Example API UI")
 
 Puedes consultar el [esquema de datos](./packages/egov-api-server/src/index.ts). He empezado con datos de localizaciones geográficas y de servicios de telecomunicaciones disponibles en la zona (antenas, canales de televisión digital, redes disponibles).
 
@@ -50,7 +50,7 @@ En http://localhost:4000 tendrás la interfaz web de acceso al API GraphQL para 
 
 Incluye la implementación de los proveedores de datos: servicios de consulta que extraen datos de fuentes públicas. Algunos servicios consultan datos cuando se solicitan (online) y otros utilizan datos locales (offline).
 
-Crear un nuevo servicio es muy sencillo. Actualmente están desarrollados los siguientes. Se aceptan ideas en las _issues_ y _pull requests_ con nuevos servicios.
+Crear un nuevo servicio es muy sencillo. Actualmente están desarrollados los siguientes. Echa un vistazo y propón nuevas [ideas en las issues](https://github.com/palmerabollo/egov/issues?q=is%3Aissue+is%3Aopen+label%3Aideas-providers) o envía tu _pull request_ con nuevos servicios. Es muy fácil.
 
 | Servicio     | Clase | Origen de los datos   | Online  |
 |------------- | ------| --------------------- | ------- |
@@ -84,7 +84,6 @@ console.table(antennas, ['code', 'latitude', 'longitude']);
 
 # TODO
 
-- [ ] Sitio web para el público general.
 - [ ] Añadir guías de colaboración.
 - [ ] Tests para detectar cambios de estructura html que hagan fallar los "scrapers".
 - [ ] Imagen Docker + publicar en npm registry para reducir curva de iniciación.
@@ -92,7 +91,7 @@ console.table(antennas, ['code', 'latitude', 'longitude']);
 
 # LICENSE
 
-Copyright 2019 - Guido García Bernardo
+Copyright 2019 - Guido García (guido.garcia AT protonmail DOT com)
 
 Licensed under the GNU Affero General Public License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
 
