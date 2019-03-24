@@ -3,13 +3,13 @@
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>egov España</title>
+	<title>egov España - Ejemplo ¿Qué empresas tienen cobertura en mi pueblo?</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Acceso abierto a datos púbicos de una vez por todas" />
 	<meta name="keywords" content="api, egov, opendata, datos" />
 	<meta name="author" content="guidogarcia.net" />
 
-	  <!-- Facebook and Twitter integration -->
+	<!-- Facebook and Twitter integration -->
 	<!--
 	<meta property="og:title" content="egov España"/>
 	<meta property="og:image" content=""/>
@@ -58,7 +58,7 @@
 				</div>
 				<div class="col-xs-10 text-right menu-1">
 					<ul>
-						<li class="active"><a href="index.html">Inicio</a></li>
+						<li><a href="index.html">Inicio</a></li>
 
 						<!--
 						<li class="has-dropdown">
@@ -72,7 +72,7 @@
 						</li>
 						-->
 
-						<li><a href="#fh5co-services">Ejemplos</a></li>
+						<li class="active"><a href="#fh5co-services">Ejemplos</a></li>
 						<li><a href="#fh5co-started">Colabora</a></li>
 						<li><a href="https://github.com/palmerabollo/egov">Github</a></li>
 					</ul>
@@ -89,21 +89,130 @@
 				<div class="col-md-12 text-left">
 					<div class="display-t">
 						<div class="display-tc animate-box" data-animate-effect="fadeInUp">
-							<h1 class="mb30"><strong>Datos públicos</strong> a tu servicio.</h1>
-							<p class="mb30" style="color: white; font-size: 28px; line-height: 1.4em ">
-								egov es un proyecto <strong>colaborativo</strong><br>
-								para que los datos públicos sean más <strong>abiertos</strong><br>
-								y cualquiera los pueda <strong>reutilizar</strong>.
-							</p>
-							<p class="mb30" style="color: lightgray; font-size: 20px; line-height: 1.4em ">
-								Por ejemplo <a href="example_network.html">¿qué empresas tienen cobertura móvil en tu pueblo?</a>
-							</p>
+                            <h1 class="mb30">Ejemplos: <strong>Móvil e Internet</strong></h1>
+							<p class="mb30" style="color: white; font-size: 28px; line-height: 1.4em">
+								¿Qué empresas tienen cobertura en mi pueblo?
+                            </p>
+                            <p class="mb30" style="color: white; font-size: 28px; line-height: 1.4em">
+                                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+                                    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+                                    crossorigin=""/>
+                                <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+                                    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+                                    crossorigin=""></script>
+                                <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.slim.min.js" crossorigin=""></script>
+
+                                <style>
+                                    #map { height: 480px; }
+                                </style>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-3">
+                                        <input placeholder="Código Postal" class="form-control form-control-lg" style="border-color: lightgray; color: white" id="postalCode" type="text" pattern="[0-9]{5}" size="5" minlength="5" maxlength="5" títle="Código postal numérico"></input>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <a href="#" id="queryAction" class="btn btn-primary" role="button">Consultar datos</a>
+                                        <br>
+                                        Ejemplos
+                                        <a href="#" onclick="$('#postalCode').val('42001'); $('#queryAction').click(); return false;">Soria</a>
+                                        <a href="#" onclick="$('#postalCode').val('09001'); $('#queryAction').click(); return false;">Burgos</a>
+                                        <a href="#" onclick="$('#postalCode').val('03502'); $('#queryAction').click(); return false;">Benidorm</a>
+                                    </div>
+                                </div>
+
+                                <div id="map"></div>
+
+                                <script>
+                                    $(() => {
+                                        const map = L.map('map', { scrollWheelZoom: false });
+
+                                        $("#queryAction").click(() => {
+                                            const postalCode = $("#postalCode").val();
+                                            query(postalCode);
+                                            return false;
+                                        });
+
+                                        function initMap() {
+                                            $('#map').hide();
+
+                                            // map.setView([51.505, -0.09], 13);
+
+                                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                                            }).addTo(map);
+                                        }
+
+                                        function render(data) {
+                                            if (data.postalCode.length === 0) {
+                                                $('#map').hide();
+                                                alert('No hay datos de servicios de telecomunicaciones cercanos a ese código postal. Prueba con otro.')
+                                                return;
+                                            }
+
+                                            $('#map').show();
+
+                                            map.invalidateSize(); // https://stackoverflow.com/a/35222481/12388
+                                            // map.setView([data.postalCode[0].latitude, data.postalCode[0].longitude], 13);
+
+                                            const markers = data.postalCode[0].radioInformation.antennas.map(antenna => {
+                                                let color = 'grey';
+                                                if (antenna.code.indexOf('VODAFONE') >= 0) {
+                                                    color = 'red';
+                                                } else if (antenna.code.indexOf('MOVISTAR') >= 0 || antenna.code.indexOf('TELEFONICA') >= 0) {
+                                                    color = 'blue';
+                                                } else if (antenna.code.indexOf('ORANGE') >= 0) {
+                                                    color = 'orange';
+                                                } else if (antenna.code.indexOf('XFERA') >= 0) {
+                                                    color = 'yellow';
+                                                }
+
+                                                let icon = new L.Icon({
+                                                    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-' + color + '.png',
+                                                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                                                    iconSize: [25, 41],
+                                                    iconAnchor: [12, 41],
+                                                    popupAnchor: [1, -34],
+                                                    shadowSize: [41, 41]
+                                                });
+
+                                                return L.marker([antenna.latitude, antenna.longitude], {icon: icon}).bindPopup(antenna.code);
+                                            });
+
+                                            const featureGroup = L.featureGroup(markers).addTo(map);
+                                            map.fitBounds(featureGroup.getBounds());
+
+                                            console.log(map.getZoom());
+                                            if (map.getZoom() > 16) {
+                                                map.setZoom(16);
+                                            }
+                                        }
+
+                                        function query(postalCode) {
+                                            const query = '{ postalCode(postalCode: \"' + postalCode + '\") { radioInformation { antennas(limit: 500) { code longitude latitude } } } }';
+
+                                            $.ajax({
+                                                url: 'https://egov-demo.herokuapp.com/',
+                                                type: 'GET',
+                                                data: { query: query },
+                                                dataType: 'json'
+                                            })
+                                            .done(results => render(results.data))
+                                            .fail(err => {
+                                                alert('Lo siento, algo ha ido mal. Intenta repetir la consulta y, si vuelve a fallar, escríbenos para que podamos arreglarlo. Gracias.');
+                                            });
+                                        }
+
+                                        initMap();
+                                    });
+                                </script>
+                            </p>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</header>
+    </header>
+
 
 	<!--
 	<div id="fh5co-project">
@@ -153,131 +262,56 @@
 			<div class="row row-pb-md">
 				<div class="col-md-8 col-md-offset-2 text-left animate-box" data-animate-effect="fadeInUp">
 					<div class="fh5co-heading">
-						<span>Algunos ejemplos</span>
-						<h2 style="margin-bottom: 30px">¿Para qué sirven los datos?</h2>
-						<p>
-							En la era digital se generan datos a un ritmo vertiginoso.
-							Los datos ayudan a responder preguntas sobre información del tráfico en tiempo real,
-							situación de las infraestructuras, servicios de comunicaciones, datos medioambientales, información de municipios,
-							corrupción política y un montón de cosas más.
-							Tienen tanto valor que a veces los llamamos el oro del siglo XXI.
-						</p>
-						<p>
-							Muchos de los datos se generan con dinero público, pero con demasiada frecuencia se utilizan formatos que
-							hacen muy difícil reutilizarlos. El proyecto <strong>egov recoge y transforma los datos públicos
-							para hacerlos más abiertos</strong>.
-							Poniendo los datos al alcance de todos podremos crear nuevos servicios útiles para los ciudadanos.
-						</p>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-4 col-sm-6 ">
-					<div class="feature-center animate-box" data-animate-effect="fadeInUp">
-						<span class="icon">
-							<i class="icon-map"></i>
-						</span>
-						<h3>Información de tráfico</h3>
-						<p>
-							¿Puedo evitar el atasco en mi ruta al trabajo? ¿Cuándo pasará el próximo autobús?
-							¿Dónde hay radares?
-						</p>
-						<!--
-						<p><a href="#">Saber más</a></p>
-						-->
-					</div>
-				</div>
-				<div class="col-md-4 col-sm-6 ">
-					<div class="feature-center animate-box" data-animate-effect="fadeInUp">
-						<span class="icon">
-							<i class="icon-mobile"></i>
-						</span>
-						<h3>Móvil e internet</h3>
-						<p>
-							¿Qué empresas tienen cobertura en mi pueblo? ¿Dónde están sus antenas?
-							¿Hay cobertura 4G?
-						</p>
-						<p><a href="example_network.html">Ver demostración</a></p>
-					</div>
-				</div>
-				<div class="clearfix visible-sm-block"></div>
-				<div class="col-md-4 col-sm-6 ">
-					<div class="feature-center animate-box" data-animate-effect="fadeInUp">
-						<span class="icon">
-							<i class="icon-tv"></i>
-						</span>
-						<h3>Televisión</h3>
-						<p>
-							¿Cómo debo orientar la antena de casa para ver mejor la tele?
-							¿Por qué no veo Disney Channel? ¿Qué repetidores hay en la zona?
-						</p>
-						<p><a href="example_television.html">Ver demostración</a></p>
-					</div>
-				</div>
+						<span>Información técnica</span>
+                        <h2 style="margin-bottom: 30px">¿Cómo funciona?</h2>
+                        <p>
+                            Al pulsar el botón estás haciendo una consulta al servicio egov.
+                            Es un servicio que permite a cualquier persona <strong>seleccionar los datos públicos que necesita con un sencillo lenguaje de consultas</strong>.
+                            Por ejemplo, esta es la pinta que tiene la consulta para obtener la ubicación de las antenas de telecomunicaciones
+                            cercanas a un código postal.
+                        </p>
+                        <p>
+                            <style>
+                            code {
+                                background: #f4f4f4;
+                                border: 1px solid #ddd;
+                                border-left: 3px solid #F73859;
+                                color: #666;
+                                page-break-inside: avoid;
+                                font-family: monospace;
+                                font-size: 15px;
+                                line-height: 1.6;
+                                margin-bottom: 1.6em;
+                                max-width: 100%;
+                                overflow: auto;
+                                padding: 1em 1.5em;
+                                display: block;
+                                word-wrap: break-word;
+                            }
+                            </style>
 
-				<div class="clearfix visible-md-block"></div>
+                            <code>
+                                {<br>
+                                    &nbsp;&nbsp;postalCode(postalCode: "09400") {<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;radioInformation {<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;antennas(limit: 500) {<br>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code<br>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;longitude<br>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;latitude<br>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                    &nbsp;&nbsp;}<br>
+                                }
+                            </code>
 
-				<div class="col-md-4 col-sm-6 ">
-					<div class="feature-center animate-box" data-animate-effect="fadeInUp">
-						<span class="icon">
-							<i class="icon-leaf"></i>
-						</span>
-						<h3>Medio ambiente</h3>
-						<p>
-							¿Qué incendios hay activos? ¿Cuál es el nivel de contaminación del aire?
-							¿Lloverá mañana?
-						</p>
-						<!--
-						<p><a href="#">Saber más</a></p>
-						-->
-					</div>
-				</div>
-				<div class="clearfix visible-sm-block"></div>
-				<div class="col-md-4 col-sm-6 ">
-					<div class="feature-center animate-box" data-animate-effect="fadeInUp">
-						<span class="icon">
-							<i class="icon-home"></i>
-						</span>
-						<h3>Datos de municipios</h3>
-						<p>
-							¿Dónde está Olmos de la Picaza? ¿Cuál es su código postal? ¿Cuántos habitantes tiene Burgos?
-						</p>
-						<!--
-						<p><a href="#">Saber más</a></p>
-						-->
-						<!--
-						<p>
-							<a href="https://raw.githubusercontent.com/palmerabollo/egov/master/docs/images/example-api-ui.png" class="link-watch image-popup">Saber más</a>
-						</p>
-						-->
-					</div>
-				</div>
-				<div class="col-md-4 col-sm-6 ">
-					<div class="feature-center animate-box" data-animate-effect="fadeInUp">
-						<span class="icon">
-							<i class="icon-user"></i>
-						</span>
-						<h3>Transparencia política</h3>
-						<p>
-							¿Qué políticos hicieron más propuestas en la última legislatura? ¿Cuánto cobra el presidente?
-							¿Qué partido tiene más imputados?
-						</p>
-						<!--
-						<p><a href="#">Saber más</a></p>
-						-->
-					</div>
-				</div>
-
-				<div class="clearfix visible-md-block"></div>
-
-				<div class="row row-pb-md">
-					<div class="col-md-8 col-md-offset-2 text-left animate-box" data-animate-effect="fadeInUp">
-						<div class="fh5co-heading">
-							<p>
-								Los datos de egov ya responden a algunas de esos preguntas.<br>
-								Necesitamos tu ayuda para añadir muchos más datos. <a href="#fh5co-started">Colabora</a>.
-							</p>
-						</div>
+                            Egov recibe la consulta y va a buscar los datos solicitados a una o varias fuentes públicas que actualmente no los ofrecen de forma abierta.
+                            Cuando tiene los datos, se los devuelve a este sitio web en un formato adecuado para poder representarlos sobre un mapa.
+                            ¡Todo esto en un abrir y cerrar de ojos!
+                        </p>
+                        <p>
+                            El servicio egov es una API GraphQL pública y cuenta con un <a href="https://egov-demo.herokuapp.com/graphql?query=%7B%0A%20%20postalCode%28postalCode%3A%20%2209400%22%29%20%7B%0A%20%20%20%20longitude%0A%20%20%20%20latitude%0A%20%20%20%20radioInformation%20%7B%0A%20%20%20%20%20%20antennas%28limit%3A%20500%29%20%7B%0A%20%20%20%20%20%20%20%20code%0A%20%20%20%20%20%20%20%20longitude%0A%20%20%20%20%20%20%20%20latitude%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A">entorno para que puedas probar tus propias consultas</a>.
+                            Anímate a probarlo.
+                        </p>
 					</div>
 				</div>
 			</div>
@@ -331,80 +365,6 @@
 		</div>
 	</div>
 	-->
-
-	<div id="fh5co-counter">
-		<div class="container">
-
-			<div class="row animate-box" data-animate-effect="fadeInUp">
-				<div class="col-md-8 col-md-offset-2 text-left fh5co-heading">
-					<span>Curiosidades del proyecto</span>
-					<h2 style="margin-bottom: 30px">¿Cómo funciona?</h2>
-					<p>
-						Sara tiene mañana una entrevista de trabajo. Quiere llegar puntual, así que intenta buscar
-						si hay alguna incidencia de tráfico en su ruta habitual. La página web de la Dirección General
-						de Tráfico (DGT) muestra algunos datos del estado de las carreteras, pero no es nada fácil
-						consultar esa información desde otras aplicaciones. Los datos son poco accesibles.
-					</p>
-					<p>
-						Por suerte a Sara le encanta programar, así que escribe un pequeño programa
-						que obtiene los datos de la página de la DGT y los hace públicos. Ahora cualquiera los puede
-						utilizar. Los datos ya son verdaderamente abiertos.
-					</p>
-					<p>
-						El proyecto egov funciona con pequeños programas como el de Sara, desarrollados por voluntarios
-						de forma colaborativa. Juntos ofrecen lo que técnicamente se conoce como un API para
-						que nuevas aplicaciones puedan consultar datos públicos con facilidad.
-					</p>
-					<p>
-						Quedan muchos datos por incluir y hace falta mucha ayuda. <a href="#fh5co-started">Colabora</a>.
-					</p>
-				</div>
-			</div>
-
-			<div class="row">
-
-				<div class="col-md-3 col-sm-6 animate-box" data-animate-effect="fadeInLeft">
-					<div class="feature-center">
-						<span class="icon">
-							<i class="ti-download"></i>
-						</span>
-						<span class="counter"><span class="js-counter" data-from="0" data-to="25" data-speed="1500" data-refresh-interval="50">1</span>K+</span>
-						<span class="counter-label">Consultas realizadas</span>
-
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6 animate-box" data-animate-effect="fadeInLeft">
-					<div class="feature-center">
-						<span class="icon">
-							<i class="ti-face-smile"></i>
-						</span>
-						<span class="counter"><span class="js-counter" data-from="0" data-to="40" data-speed="1500" data-refresh-interval="50">1</span>+</span>
-						<span class="counter-label">Usuarios</span>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6 animate-box" data-animate-effect="fadeInLeft">
-					<div class="feature-center">
-						<span class="icon">
-							<i class="ti-briefcase"></i>
-						</span>
-						<span class="counter"><span class=" js-counter" data-from="0" data-to="4" data-speed="1500" data-refresh-interval="50">1</span>+</span>
-						<span class="counter-label">Fuentes de datos</span>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6 animate-box" data-animate-effect="fadeInLeft">
-					<div class="feature-center">
-						<span class="icon">
-							<i class="ti-time"></i>
-						</span>
-						<span class="counter"><span class="js-counter" data-from="0" data-to="99" data-speed="1500" data-refresh-interval="50">1</span>%</span>
-						<span class="counter-label">Disponibilidad</span>
-
-					</div>
-				</div>
-
-			</div>
-		</div>
-	</div>
 
 	<!--
 	<div id="fh5co-blog" class="fh5co-bg-section">
