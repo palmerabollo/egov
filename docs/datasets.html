@@ -224,7 +224,7 @@
 									var template = document.getElementById('dataset-template');
 									var element = template.content.cloneNode(true);
 									element.querySelector('.dataset-title').innerText = issue.title;
-									element.querySelector('.dataset-link').setAttribute('href', issue.url);
+									element.querySelector('.dataset-link').setAttribute('href', issue.html_url);
 									document.getElementById('dataset-idea-list').appendChild(element);
 								});
 							}
