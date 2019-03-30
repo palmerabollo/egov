@@ -84,8 +84,9 @@ console.table(antennas, ['code', 'latitude', 'longitude']);
 
 # TODO
 
-- [ ] Añadir guías de colaboración.
+- [ ] Librería y utilidades para facilitar web scraping.
 - [ ] Tests para detectar cambios de estructura html que hagan fallar los "scrapers".
+- [ ] Añadir guías de colaboración.
 - [ ] Imagen Docker + publicar en npm registry para reducir curva de iniciación.
 - [ ] ...
 

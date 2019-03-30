@@ -3,7 +3,7 @@
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>egov España - Ejemplo ¿hacia dónde debo orientar la antena de TV?</title>
+	<title>egov España - Fuentes de datos e ideas</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="Acceso abierto a datos púbicos de una vez por todas" />
 	<meta name="keywords" content="api, egov, opendata, datos" />
@@ -89,70 +89,10 @@
 				<div class="col-md-12 text-left">
 					<div class="display-t">
 						<div class="display-tc animate-box" data-animate-effect="fadeInUp">
-                            <h1 class="mb30">Ejemplos: <strong>Televisión</strong></h1>
+                            <h1 class="mb30">Catálogo de <strong>datos abiertos</strong></h1>
 							<p class="mb30" style="color: white; font-size: 28px; line-height: 1.4em">
-								¿Hacia dónde oriento la antena para ver Disney Channel?
-                            </p>
-                            <p class="mb30" style="color: white; font-size: 28px; line-height: 1.4em">
-                                <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.slim.min.js" crossorigin=""></script>
-
-                                <div class="form-group row">
-                                    <div class="col-sm-3">
-                                        <input placeholder="Código Postal" class="form-control form-control-lg" style="border-color: lightgray; color: white" id="postalCode" type="text" pattern="[0-9]{5}" size="5" minlength="5" maxlength="5" títle="Código postal numérico"></input>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <a href="#" id="queryAction" class="btn btn-primary" role="button">Consultar datos</a>
-                                        <br>
-                                        Ejemplos
-                                        <a href="#" onclick="$('#postalCode').val('09133'); $('#queryAction').click(); return false;">Olmos de la Picaza</a>
-                                        <a href="#" onclick="$('#postalCode').val('47851'); $('#queryAction').click(); return false;">San Pedro de Latarce</a>
-                                    </div>
-                                </div>
-
-                                <script>
-                                    $(() => {
-                                        $("#queryAction").click(() => {
-                                            const postalCode = $("#postalCode").val();
-                                            query(postalCode);
-                                            return false;
-                                        });
-
-                                        function render(data) {
-                                            if (data.postalCode.length === 0) {
-                                                alert('No hay datos de repetidores de TV cercanos a ese código postal. Prueba con otro.')
-                                                return;
-                                            }
-
-											const signals = data.postalCode[0].radioInformation.televisionSignals.filter(signal => signal.multiple === 'MPE1');
-											if (signals.length === 0) {
-												$('#result').text('No hay señales de TV en la zona que emitan ver Disney Channel');
-											} else if (signals.length === 1) {
-												$('#result').html('Hay <u>una señal</u> de TV en la zona que emite Disney Channel:<br><strong>' + signals[0].center + '</strong>');
-											} else {
-												$('#result').html('Hay <u>' + signals.length + ' señales</u> de TV en la zona que emiten Disney Channel.<br>');
-												let places = signals.map(signal => signal.center).join(', ');
-												$('#result').append('<strong>' + places + '</strong>');
-											}
-                                        }
-
-                                        function query(postalCode) {
-                                            const query = '{ postalCode(postalCode: \"' + postalCode + '\") { radioInformation { televisionSignals { multiple center channel } } } }';
-
-                                            $.ajax({
-                                                url: 'https://egov-demo.herokuapp.com/',
-                                                type: 'GET',
-                                                data: { query: query },
-                                                dataType: 'json'
-                                            })
-                                            .done(results => render(results.data))
-                                            .fail(err => {
-                                                alert('Lo siento, algo ha ido mal. Intenta repetir la consulta y, si vuelve a fallar, escríbenos para que podamos arreglarlo. Gracias.');
-                                            });
-                                        }
-                                    });
-								</script>
-								<p id="result" class="mb30" style="color: white; font-size: 28px; line-height: 1.4em">
-								</p>
+								Consulta el catálogo de datos públicos disponibles.<br>
+								¿Echas algo de menos? <u>Propón nuevas ideas</u>.
                             </p>
 						</div>
 					</div>
@@ -160,7 +100,6 @@
 			</div>
 		</div>
     </header>
-
 
 	<!--
 	<div id="fh5co-project">
@@ -210,56 +149,97 @@
 			<div class="row row-pb-md">
 				<div class="col-md-8 col-md-offset-2 text-left animate-box" data-animate-effect="fadeInUp">
 					<div class="fh5co-heading">
-						<span>Información técnica</span>
-                        <h2 style="margin-bottom: 30px">¿Cómo funciona?</h2>
-                        <p>
-                            Al pulsar el botón estás haciendo una consulta al servicio egov.
-                            Es un servicio que permite a cualquier persona <strong>seleccionar los datos públicos que necesita con un sencillo lenguaje de consultas</strong>.
-                            Por ejemplo, esta es la pinta que tiene la consulta para obtener las señales de televisión disponibles en un código postal.
-                        </p>
-                        <p>
-                            <style>
-                            code {
-                                background: #f4f4f4;
-                                border: 1px solid #ddd;
-                                border-left: 3px solid #F73859;
-                                color: #666;
-                                page-break-inside: avoid;
-                                font-family: monospace;
-                                font-size: 15px;
-                                line-height: 1.6;
-                                margin-bottom: 1.6em;
-                                max-width: 100%;
-                                overflow: auto;
-                                padding: 1em 1.5em;
-                                display: block;
-                                word-wrap: break-word;
-                            }
-                            </style>
+						<style>
+							.fh5co-heading h3 {
+								margin-bottom: 0;
+							}
+							.fh5co-heading p {
+								margin-bottom: 20px;
+							}
 
-                            <code>
-                                {<br>
-                                    &nbsp;&nbsp;postalCode(postalCode: "09400") {<br>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;radioInformation {<br>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;televisionSignals {<br>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiple<br>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;center<br>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;channel<br>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-                                    &nbsp;&nbsp;}<br>
-                                }
-                            </code>
+							.fh5co-heading span.icon {
+								display: inline;
+							}
+						</style>
+						<span>Catálogo de datos</span>
+						<h2 style="margin-bottom: 30px">Datos abiertos disponibles</h2>
+						<div id="dataset-available-list">
+							<p>
+								<h3>Códigos postales y municipios</h3>
+								<div class="label label-success">general</div>
+								<div class="label label-success">municipios</div>
+								<span class="icon" title="Fuente: geonames.org">
+									<i class="icon-info"></i>
+								</span>
+							</p>
+							<p>
+								<h3>Localización de antenas de telefonía móvil</h3>
+								<div class="label label-success">telecomunicaciones</div>
+								<div class="label label-success">infraestructuras</div>
+								<span class="icon" title="Fuente: geoportal.minetur.gob.es">
+									<i class="icon-info"></i>
+								</span>
+								<span class="small text-muted">
+									<a href="example_network.html">Ver ejemplo de uso</a>
+								</span>
+							</p>
+							<p>
+								<h3>Cobertura 4G a 800MHz por ubicación geográfica</h3>
+								<div class="label label-success">telecomunicaciones</div>
+								<span class="icon" title="Fuente: www.llega800.es">
+									<i class="icon-info"></i>
+								</span>
+							</p>
+							<p>
+								<h3>Señales de televisión por ubicación geográfica</h3>
+								<div class="label label-success">telecomunicaciones</div>
+								<span class="icon" title="Fuente: www.televisiondigital.gob.es">
+									<i class="icon-info"></i>
+								</span>
+								<span class="small text-muted">
+									<a href="example_television.html">Ver ejemplo de uso</a>
+								</span>
+							</p>
+						</div>
 
-                            Egov recibe la consulta y va a buscar los datos solicitados a varias fuentes públicas que actualmente no los ofrecen de forma abierta.
-                            Cuando tiene los datos, se los devuelve a este sitio web en un formato adecuado para poder mostrártelos.
-                            ¡Todo esto en un abrir y cerrar de ojos!
-                        </p>
-                        <p>
-                            El servicio egov es una API GraphQL pública y cuenta con un <a href="https://egov-demo.herokuapp.com/graphql?query=%7B%0A%20%20postalCode%28postalCode%3A%20%2209400%22%29%20%7B%0A%20%20%20%20longitude%0A%20%20%20%20latitude%0A%20%20%20%20radioInformation%20%7B%0A%20%20%20%20%20%20antennas%28limit%3A%20500%29%20%7B%0A%20%20%20%20%20%20%20%20code%0A%20%20%20%20%20%20%20%20longitude%0A%20%20%20%20%20%20%20%20latitude%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A">entorno para que puedas probar tus propias consultas</a>.
-                            Anímate a probarlo.
-                        </p>
+						<h2 style="margin-bottom: 30px">Nuevas ideas registradas</h2>
+						<div id="dataset-idea-list">
+						</div>
 					</div>
+
+					<template id="dataset-template">
+						<p>
+							<h3 class="dataset-title"></h3>
+							<div class="label label-warning dataset-label">idea</div>
+							<span><a href="" class="dataset-link">ver detalles</a></span>
+						</p>
+					</template>
+
+					<script src="https://unpkg.com/jquery@3.3.1/dist/jquery.slim.min.js" crossorigin=""></script>
+
+					<script>
+						$(() => {
+							function render(issues) {
+								issues.forEach(issue => {
+									var template = document.getElementById('dataset-template');
+									var element = template.content.cloneNode(true);
+									element.querySelector('.dataset-title').innerText = issue.title;
+									element.querySelector('.dataset-link').setAttribute('href', issue.url);
+									document.getElementById('dataset-idea-list').appendChild(element);
+								});
+							}
+
+							function query(label) {
+								$.ajax('https://api.github.com/repos/palmerabollo/egov/issues?state=open&labels=' + label)
+								.done(render)
+								.fail(err => {
+									alert('Lo siento, no he podido cargar las ideas aportadas por los usuarios. Si vuelve a fallar, escríbenos para que podamos arreglarlo. Gracias.');
+								});
+							}
+
+							query('ideas-providers');
+						});
+					</script>
 				</div>
 			</div>
 		</div>

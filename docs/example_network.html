@@ -178,7 +178,6 @@
                                             const featureGroup = L.featureGroup(markers).addTo(map);
                                             map.fitBounds(featureGroup.getBounds());
 
-                                            console.log(map.getZoom());
                                             if (map.getZoom() > 16) {
                                                 map.setZoom(16);
                                             }
@@ -468,6 +467,7 @@
 
 				<div class="col-md-2 col-sm-4 col-xs-6 col-md-push-1 ">
 					<ul class="fh5co-footer-links">
+						<li><a href="datasets.html">Catálogo de datos</a></li>
 						<li><a href="https://github.com/palmerabollo/egov">Repositorio <strong>Github</strong></a></li>
 						<li><a href="https://bit.ly/egov-demo">Demo API GraphQL</a></li>
 					</ul>
