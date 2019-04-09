@@ -84,6 +84,7 @@ console.table(antennas, ['code', 'latitude', 'longitude']);
 
 # TODO
 
+- [ ] Prueba de concepto para soportar providers implementados en Pyton.
 - [ ] Librería y utilidades para facilitar web scraping.
 - [ ] Tests para detectar cambios de estructura html que hagan fallar los "scrapers".
 - [ ] Añadir guías de colaboración.
