@@ -11,4 +11,4 @@ cache:
     - typings
 notifications:
   email:
-    - palmerabollo@gmail.com
+    - palmerabollo+travis@gmail.com
