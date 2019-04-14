@@ -1,0 +1,23 @@
+{
+  "name": "serverless-radars",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A serverless data provider",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "egov",
+    "sdk",
+    "data"
+  ],
+  "author": "Javier García (@javiergb_com)",
+  "contributors": [
+    "Guido García (@palmerabollo)"
+  ],
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "serverless-python-requirements": "^4.3.0"
+  }
+}

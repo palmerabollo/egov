@@ -1,0 +1,23 @@
+service: adapter-dgt
+
+provider:
+  name: aws
+  runtime: python3.7
+  memorySize: 2048
+  timeout: 300
+  region: eu-west-1
+  stage: dev
+  versionFunctions: false
+  environment:
+    maintainer: egov
+
+functions:
+  adapt:
+    handler: handler.adapt
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
