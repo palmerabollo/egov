@@ -2,6 +2,7 @@ import requests
 import json
 import bs4
 import camelot
+import threading
 from urllib.parse import urljoin
 from datetime import datetime
 
@@ -40,10 +41,18 @@ def find_pdf_url():
 
 
 def scrape():
+    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     pdf_url = find_pdf_url()
 
+    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
     # Parsing the PDF can take some time (around 1 min)
-    tables = camelot.read_pdf(pdf_url, pages="all")
+
+    # TODO use threads to overcome the 30-sec timeout in API Gateway !!
+    tables = camelot.read_pdf(pdf_url, pages="1")
+
+    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
     if len(tables) == 0:
         # XXX use proper exception
         raise Exception("No data found in the source document")
@@ -76,32 +85,27 @@ def scrape():
 
     return radars
 
-# XXX use dictionaries to map types and senses instead of using if/else-based spaguetti code
+
+TYPES={
+    "Radar Fijo": "FIXED",
+    "Radar Móvil": "MOVING",
+    "Radar Tramo": "STRETCH"
+}
+
+SENSES={
+    "Creciente": "INCREASING",
+    "Decreciente": "DECREASING",
+    "Ambos": "BOTH"
+}
 
 
-def map_type(raw):
-    if raw == "Radar Fijo":
-        return "FIXED"
-    elif raw == "Radar Móvil":
-        return "MOVING"
-    elif raw == "Radar Tramo":
-        return "STRETCH"
-    else:
-        print("UNKNOWN TYPE >" + raw + "<")
-        return "UNKNOWN"
+def map_type(raw_value):
+    return TYPES.get(raw_value, "UNKNOWN")
 
 
-def map_sense(raw):
-    if raw == "Creciente":
-        return "INCREASING"
-    elif raw == "Decreciente":
-        return "DECREASING"
-    elif raw == "Ambos":
-        return "BOTH"
-    else:
-        print("UNKNOWN SENSE >" + raw + "<")
-        return "UNKNOWN"
+def map_sense(raw_value):
+    return SENSES.get(raw_value, "UNKNOWN")
 
 
-def convert_date(raw):
-    return datetime.strptime(raw, '%d/%m/%Y').isoformat()  # TODO review if UTC
+def convert_date(raw_value):
+    return datetime.strptime(raw_value, '%d/%m/%Y').isoformat()  # TODO review if UTC

@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: python3.7
   memorySize: 3000
-  timeout: 600
+  timeout: 60
   region: eu-west-1
   stage: dev
   versionFunctions: false
@@ -15,6 +15,7 @@ functions:
   adapt:
     handler: handler.adapt
     events:
+      # The AWS API Gateway has a 30-seconds timeout
       - http:
           path: "{proxy+}"
           method: get
