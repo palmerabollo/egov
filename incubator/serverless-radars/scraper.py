@@ -84,8 +84,10 @@ def map_type(raw):
         return "FIXED"
     elif raw == "Radar Móvil":
         return "MOVING"
+    elif raw == "Radar Tramo":
+        return "STRETCH"
     else:
-        print("UNKNOWN >" + raw + "<")
+        print("UNKNOWN TYPE >" + raw + "<")
         return "UNKNOWN"
 
 
@@ -97,16 +99,8 @@ def map_sense(raw):
     elif raw == "Ambos":
         return "BOTH"
     else:
-        print("UNKNOWN >" + raw + "<")
+        print("UNKNOWN SENSE >" + raw + "<")
         return "UNKNOWN"
-
-
-def map_km(raw):
-    try:
-        return float(raw)
-    except ValueError:
-        print("UNKNOWN KM >" + raw + "<")
-        return -1  # TODO
 
 
 def convert_date(raw):

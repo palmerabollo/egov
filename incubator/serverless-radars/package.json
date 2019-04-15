@@ -1,8 +1,8 @@
 {
-  "name": "serverless-radars",
+  "name": "egov-adapter-traffic-radars",
   "private": true,
   "version": "1.0.0",
-  "description": "A serverless data provider",
+  "description": "A serverless adapter to scrape traffic radars from the DGT website",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

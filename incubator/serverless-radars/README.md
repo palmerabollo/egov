@@ -51,6 +51,10 @@ provider:
 functions:
   adapt:
     handler: handler.adapt
+    events:
+      - http:
+          path: "{proxy+}"
+          method: get
 
 plugins:
   - serverless-python-requirements
@@ -60,8 +64,8 @@ custom:
     dockerizePip: non-linux
 ```
 
-TODO: document serverless-python-requirements
-TODO: provide a template to make this process even simpler
+You only need "serverless-python-requirements" if you plan to use third-party python modules.
+In the future, we will provide a template to make all this process even simpler.
 
 ## How to test an adapter
 
