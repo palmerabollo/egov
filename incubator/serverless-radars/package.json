@@ -12,9 +12,9 @@
     "sdk",
     "data"
   ],
-  "author": "Javier García (@javiergb_com)",
+  "author": "Guido García (@palmerabollo)",
   "contributors": [
-    "Guido García (@palmerabollo)"
+    "Javier García (@javiergb_com)"
   ],
   "license": "AGPL-3.0-or-later",
   "dependencies": {

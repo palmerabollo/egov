@@ -1,14 +1,12 @@
-import json
 from scraper import scrape
 
+
 def adapt(event, context):
-    result = scrape()
+    body = scrape()
 
     # TODO handle scraping errors
 
-    response = {
+    return {
         "statusCode": 200,
-        "body": result
+        "body": body
     }
-
-    return response

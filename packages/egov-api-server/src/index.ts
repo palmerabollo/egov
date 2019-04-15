@@ -114,6 +114,45 @@ const typeDefs = gql`
     televisionSignals: [TelevisionSignal]
   }
 
+  """
+  Different types of traffic radars.
+  """
+  enum TrafficRadarType {
+    "Fixed traffic radar. Its position doesn't change."
+    FIXED,
+    "Moving traffic radar. Its position changes."
+    MOVING,
+    "Other unknown types of traffic radars"
+    UNKNOWN
+  }
+
+
+  """
+  Traffic radar sense in the road.
+  """
+  enum TrafficRadarSense {
+    "Increasing sense of the road."
+    INCREASING,
+    "Decreasing sense of the road."
+    DECREASING,
+    "Both senses (increasing and decreasing)."
+    BOTH,
+    "Unknown sense for unexpected values egov does not understand.",
+    UNKNOWN
+  }
+
+  """
+  Traffic radar.
+  """
+  type TrafficRadar {
+    provincia,
+    carretera,
+    tipo,
+    pk,
+    sense,
+    fecha
+  }
+
   "GraphQL API entry point."
   type Query {
     "Get information about geographical places that have a specific postal code."
