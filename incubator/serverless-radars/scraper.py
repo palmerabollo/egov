@@ -1,10 +1,13 @@
 import requests
 import json
 import bs4
+import time
+from multiprocessing import Process, Pipe
 import camelot
-import threading
+import camelot.utils as utils
 from urllib.parse import urljoin
 from datetime import datetime
+from PyPDF2 import PdfFileReader
 
 BASE_URL = "http://www.dgt.es/es/el-trafico/control-de-velocidad/"
 TEXT_LINK_DOWNLOAD = "aquí"
@@ -40,33 +43,32 @@ def find_pdf_url():
         req.raise_for_status()
 
 
-def scrape():
-    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    pdf_url = find_pdf_url()
+def pdf_to_table(file_path, start, end, conn):
+    """
+    Parses the rows in a set of PDF pages
+    """
+    tables = camelot.read_pdf(file_path, pages="{}-{}".format(start, end))
 
-    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    if end != 'end' and len(tables) != (end - start + 1):
+        raise Exception("No valid data found in the source document")
 
-    # Parsing the PDF can take some time (around 1 min)
+    print("process pdf pages {} to {}".format(start, end))
+    radars = tables_to_radars(tables)
+    print("{} radars found".format(len(radars)))
+    conn.send(radars)
 
-    # TODO use threads to overcome the 30-sec timeout in API Gateway !!
-    tables = camelot.read_pdf(pdf_url, pages="1")
 
-    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-
-    if len(tables) == 0:
-        # XXX use proper exception
-        raise Exception("No data found in the source document")
-
+def tables_to_radars(tables):
     radars = []
 
     for index_table, table in enumerate(tables):
         for index_row, row in table.df.iterrows():
             if index_table == 0 and index_row == 0:  # skip header
-                continue
+               continue
 
             sense = map_sense(row.values[4])
             radar = {
-                "adminName2": row.values[0],
+                "adminName2": row.values[0],  # adminName2 is the same term used by geonames
                 "roadName": row.values[1],
                 "type": map_type(row.values[2]),
                 "sense": sense,
@@ -82,6 +84,47 @@ def scrape():
                 radar["locations"].append(float(row.values[3]))
 
             radars.append(radar)
+
+    return radars
+
+
+def scrape():
+    _t = time.time()
+    pdf_url = find_pdf_url()
+    file_path = utils.download_url(pdf_url)
+    print("Elapsed time {}".format(time.time() - _t))
+
+    infile = PdfFileReader(file_path, strict=False)
+    pages = infile.getNumPages()
+
+    # Parsing the PDF can take some time (around 1 min)
+    # We use multiprocessing to overcome the 30-sec timeout in API Gateway !!
+    # see examples https://aws.amazon.com/blogs/compute/parallel-processing-in-python-with-aws-lambda/
+    # Notice that multiprocessing.Queue does not work in AWS lambda
+
+    pages_per_process = 2
+    procs = []
+    parent_conns = []
+    for page in range(1, pages, pages_per_process):
+        parent_conn, child_conn = Pipe()
+        parent_conns.append(parent_conn)
+
+        start = page
+        end = page + pages_per_process - 1 if page + pages_per_process - 1 < pages else 'end'
+        p = Process(target=pdf_to_table, args=(file_path, start, end, child_conn))
+        procs.append(p)
+        p.start()
+
+
+    radars = []
+
+    for parent_connection in parent_conns:
+        radars.extend(parent_connection.recv())
+
+    for p in procs:
+        p.join()
+
+    print("Elapsed time {}".format(time.time() - _t))
 
     return radars
 
@@ -108,4 +151,4 @@ def map_sense(raw_value):
 
 
 def convert_date(raw_value):
-    return datetime.strptime(raw_value, '%d/%m/%Y').isoformat()  # TODO review if UTC
+    return datetime.strptime(raw_value, '%d/%m/%Y').isoformat()
