@@ -1,0 +1,50 @@
+service: egov-adapter-traffic-radars
+
+custom:
+  bucket: egov-adapter-traffic-radars
+  region: eu-west-1
+  pythonRequirements:
+    dockerizePip: non-linux
+
+provider:
+  name: aws
+  runtime: python3.7
+  memorySize: 2048
+  timeout: 90
+  region: ${self:custom.region}
+  stage: dev
+  versionFunctions: false
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:CreateBucket
+      Resource: "arn:aws:s3:::*"
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - S3:GetObject
+      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+  tags:
+    maintainer: egov
+  environment:
+    BUCKET: ${self:custom.bucket}
+    REGION: ${self:custom.region}
+
+
+functions:
+  scrape:
+    handler: handler.scheduled_scrape
+    events:
+      - schedule:
+          name: egov-adapter-traffic-radars-scrape
+          description: egov-adapter-traffic-radars scrape scheduling
+          rate: rate(6 hours)
+  adapt:
+    handler: handler.adapt
+    events:
+      - http:
+          path: "{proxy+}"
+          method: get
+
+plugins:
+  - serverless-python-requirements

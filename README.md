@@ -54,10 +54,11 @@ Crear un nuevo servicio es muy sencillo. Actualmente están desarrollados los si
 
 | Servicio     | Clase | Origen de los datos   | Online  |
 |------------- | ------| --------------------- | ------- |
-| Búsqueda de poblaciones y códigos postales<br><i>Categoría: General</i> | `PostalCodeService` | geonames.org | ❎<br><small>(file)</small> |
+| Búsqueda de poblaciones y códigos postales<br><i>Categoría: General</i> | `PostalCodeService` | geonames.org | ❎<br><small>(local file)</small> |
 | Localización de antenas de telefonía móvil<br><i>Categoría: Telco</i> | `AntennaService` | geoportal.minetur.gob.es | ✅<br><small>(api)</small >|
 | Comprobación de cobertura 4G a 800MHz<br><i>Categoría: Telco</i> | `NetworkService` | www.llega800.es | ✅<br><small>(api)</small> |
 | Señales de televisión por ubicación geográfica<br><i>Categoría: Telco</i> | `DigitalTelevisionService` | www.televisiondigital.gob.es | ✅<br><small>(html)</small> |
+| Radares de tráfico<br><i>Categoría: Tráfico</i> | `TrafficRadarService` | www.dgt.es | ✅<br><small>(html, pdf file)</small> |
 
 ## egov-examples
 

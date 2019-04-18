@@ -72,16 +72,16 @@ def tables_to_radars(tables):
                 "roadName": row.values[1],
                 "type": map_type(row.values[2]),
                 "sense": sense,
-                "locations": [],
+                "kilometers": [],
                 "updated_at": convert_date(row.values[5])
             }
 
             if sense is "BOTH":
                 kms = row.values[3].split(" - ")  # XXX this split is a bit fragile
-                radar["locations"].append(float(kms[0]))
-                radar["locations"].append(float(kms[1]))
+                radar["kilometers"].append(float(kms[0]))
+                radar["kilometers"].append(float(kms[1]))
             else:
-                radar["locations"].append(float(row.values[3]))
+                radar["kilometers"].append(float(row.values[3]))
 
             radars.append(radar)
 
