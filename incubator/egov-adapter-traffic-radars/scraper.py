@@ -68,7 +68,7 @@ def tables_to_radars(tables):
 
             sense = map_sense(row.values[4])
             radar = {
-                "adminName2": row.values[0],  # adminName2 is the same term used by geonames
+                "adminName2": row.values[0],  # XXX adminName2 is the same term used by geonames, we need to normalize its value here
                 "roadName": row.values[1],
                 "type": map_type(row.values[2]),
                 "sense": sense,

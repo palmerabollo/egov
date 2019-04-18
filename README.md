@@ -11,6 +11,7 @@ Prueba a consultar algunos ejemplos en una demo real:
 * [Antenas de telefonía de Aranda de Duero](http://bit.ly/egov-demo-2).
 * [Señales de Televisión de Villadiego](http://bit.ly/egov-demo-3).
 * [Cobertura 4G a 800MHz en Aranda de Duero](http://bit.ly/egov-demo-4).
+* [Localización de radares de tráfico](https://egov-demo.herokuapp.com/?query={%20poi%20{%20...%20on%20TrafficRadar%20{%20roadName%20adminName2%20type%20kilometers%20}%20}%20}).
 
 Faltan muchos servicios por incluir y no voy a poder hacerlo solo. **¡Colabora!**
 
