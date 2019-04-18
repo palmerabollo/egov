@@ -66,10 +66,6 @@ const server = new ApolloServer({
     postalCodeService: new egov.PostalCodeService() as DataSource<any>,
     trafficRadarService: new egov.TrafficRadarService() as DataSource<any>
   }),
-  formatError: (error: Error) => {
-    logops.error(error);
-    return error;
-  },
   resolvers,
   tracing: process.env.NODE_ENV === 'development',
   typeDefs
