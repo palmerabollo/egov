@@ -9,8 +9,6 @@ custom:
 provider:
   name: aws
   runtime: python3.7
-  memorySize: 2048
-  timeout: 90
   region: ${self:custom.region}
   stage: dev
   versionFunctions: false
@@ -33,6 +31,8 @@ provider:
 
 functions:
   scrape:
+    timeout: 120
+    memorySize: 3008
     handler: handler.scheduled_scrape
     events:
       - schedule:
@@ -40,6 +40,8 @@ functions:
           description: egov-adapter-traffic-radars scrape scheduling
           rate: rate(6 hours)
   adapt:
+    timeout: 5
+    memorySize: 256
     handler: handler.adapt
     events:
       - http:
