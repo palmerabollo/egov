@@ -109,8 +109,8 @@ enum TrafficRadarType {
   "Fixed traffic radar. Its position doesn't change."
   FIXED
 
-  "Moving traffic radar. Its position changes."
-  MOVING
+  "Mobile traffic radar. Its position changes."
+  MOBILE
 
   "Stretch traffic radar."
   STRETCH

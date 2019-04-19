@@ -127,7 +127,7 @@ def scrape():
 
 TYPES={
     "Radar Fijo": "FIXED",
-    "Radar Móvil": "MOVING",
+    "Radar Móvil": "MOBILE",
     "Radar Tramo": "STRETCH"
 }
 
