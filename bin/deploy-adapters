@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+if [[ -z ${AWS_ACCESS_KEY_ID} || -z ${AWS_SECRET_ACCESS_KEY} ]] ; then
+   echo "You need to configure AWS environment variables AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY"
+   exit 1;
+fi
+
+for adapter in $(ls adapters); do
+    pushd $(pwd)
+    cd adapters/$adapter
+    npx serverless deploy
+    popd
+done
