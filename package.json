@@ -13,7 +13,9 @@
     "test": "lerna run test",
     "watch": "npm-run-all --parallel watch:*",
     "watch:api-server": "lerna exec --scope @egov/api-server -- npm run watch",
-    "watch:packages": "lerna exec --ignore  @egov/api-server -- npm run watch"
+    "watch:packages": "lerna exec --ignore  @egov/api-server -- npm run watch",
+    "deploy": "npm-run-all --parallel deploy:*",
+    "deploy:adapters": "bin/deploy-adapters"
   },
   "engines": {
     "node": ">=10"
