@@ -11,7 +11,7 @@ Prueba a consultar algunos ejemplos en una demo real:
 * [Antenas de telefonía de Aranda de Duero](http://bit.ly/egov-demo-2).
 * [Señales de Televisión de Villadiego](http://bit.ly/egov-demo-3).
 * [Cobertura 4G a 800MHz en Aranda de Duero](http://bit.ly/egov-demo-4).
-* [Localización de radares de tráfico](https://egov-demo.herokuapp.com/?query={%20poi%20{%20...%20on%20TrafficRadar%20{%20roadName%20adminName2%20type%20kilometers%20}%20}%20}).
+* [Listado de radares de tráfico](http://bit.ly/egov-demo-5).
 
 Faltan muchos servicios por incluir y no voy a poder hacerlo solo. **¡Colabora!**
 
@@ -38,14 +38,14 @@ Sólo necesitas [Node.js 10+](https://nodejs.org/es/download/). Debes inicializa
 git clone git@github.com:palmerabollo/egov.git
 cd egov
 npm install
-````
+```
 
 Y ejecutarlo:
 ```
 npm run start:api-server
 ```
 
-En http://localhost:4000 tendrás la interfaz web de acceso al API GraphQL para ejecutar tus consultas.
+En http://localhost:4000 tendrás la interfaz web de acceso al API GraphQL para ejecutar tus consultas. Si te apetece cacharrear, hay más detalles sobre el proceso de desarrollo en la [guía para colaboradores](./CONTRIBUTING.md).
 
 ## egov-data-providers
 
@@ -59,7 +59,7 @@ Crear un nuevo servicio es muy sencillo. Actualmente están desarrollados los si
 | Localización de antenas de telefonía móvil<br><i>Categoría: Telco</i> | `AntennaService` | geoportal.minetur.gob.es | ✅<br><small>(api)</small >|
 | Comprobación de cobertura 4G a 800MHz<br><i>Categoría: Telco</i> | `NetworkService` | www.llega800.es | ✅<br><small>(api)</small> |
 | Señales de televisión por ubicación geográfica<br><i>Categoría: Telco</i> | `DigitalTelevisionService` | www.televisiondigital.gob.es | ✅<br><small>(html)</small> |
-| Radares de tráfico<br><i>Categoría: Tráfico</i> | `TrafficRadarService` | www.dgt.es | ✅<br><small>(html, pdf file)</small> |
+| Radares de tráfico<br><i>Categoría: Tráfico</i> | `TrafficRadarService` | www.dgt.es | ✅<br><small>(html, pdf)</small> |
 
 ## egov-examples
 
@@ -84,14 +84,17 @@ console.table(antennas, ['code', 'latitude', 'longitude']);
 // └─────────┴───────────────────────────────────┴───────────┴───────────┘
 ```
 
-# TODO
+# Incubator
 
-- [ ] Prueba de concepto para soportar providers implementados en Pyton.
-- [ ] Librería y utilidades para facilitar web scraping.
-- [ ] Tests para detectar cambios de estructura html que hagan fallar los "scrapers".
-- [ ] Añadir guías de colaboración.
-- [ ] Imagen Docker + publicar en npm registry para reducir curva de iniciación.
-- [ ] ...
+## Soporte de múltiples lenguajes de programación
+
+El código de eGov está desarrollado en Node.js (TypeScript). Quienes quieran contribuir con nuevos proveedores de datos en otros lenguaje de programación, tienen la posibilidad de que se ejecuten como procesos independientes que expongan un interfaz HTTP. Estos procesos **adaptadores** pueden obtener los datos, procesarlos y ofrecerlos a eGov a través de ese interfaz HTTP.
+
+Hay una [prueba de concepto para obtener los radares de tráfico](./incubator/egov-adapter-traffic-radars) con un proceso Python que hace *scraping* de los datos de radares de la DGT. Este proceso se está ejecutando como una función serverless en AWS Lambda.
+
+> data-provider --(http)--> adapter --(http scrape)--> datasource
+
+¿Por qué serverles? Porque es la manera de hacer el proyecto económicamente sostenible, sin tener que pedir dinero por ahora.
 
 # LICENSE
 
