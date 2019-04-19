@@ -137,10 +137,13 @@ enum TrafficRadarSense {
 }
 
 """
-Traffic radar.
+Traffic radar. Beta.
 """
 type TrafficRadar {
-  "Order subdivision (country/province)."
+  """
+  Order subdivision (province).
+  Some radars in Cataluña don't have this info and appear as "UNKNOWN (Cataluña)" for now.
+  """
   adminName2: String!
 
   "Name of the road. For example N-IV or CM-3106."
@@ -156,8 +159,12 @@ type TrafficRadar {
   The point in the road in kilometers.
   A radar can have up to two locations, one per sense in the road.
   These locations must be translated into geographical coordinates in the future.
+  Also, its semantic for STRETCH radars must be reviewed.
   """
   kilometers: [Float]!
+
+  "Maximum allowed speed at that point in the road."
+  maxSpeed: Float
 }
 
 """
