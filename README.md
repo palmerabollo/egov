@@ -86,11 +86,11 @@ console.table(antennas, ['code', 'latitude', 'longitude']);
 
 # Incubator
 
-## Soporte de múltiples lenguajes de programación
+## Adaptadores. Soporte de múltiples lenguajes de programación
 
 El código de eGov está desarrollado en Node.js (TypeScript). Quienes quieran contribuir con nuevos proveedores de datos en otros lenguaje de programación, tienen la posibilidad de que se ejecuten como procesos independientes que expongan un interfaz HTTP. Estos procesos **adaptadores** pueden obtener los datos, procesarlos y ofrecerlos a eGov a través de ese interfaz HTTP.
 
-Hay una [prueba de concepto para obtener los radares de tráfico](./incubator/egov-adapter-traffic-radars) con un proceso Python que hace *scraping* de los datos de radares de la DGT. Este proceso se está ejecutando como una función serverless en AWS Lambda.
+Hay una [prueba de concepto para obtener los radares de tráfico](./adapters/egov-adapter-traffic-radars) con un proceso Python que hace *scraping* de los datos de radares de la DGT. Este proceso se está ejecutando como una función serverless en AWS Lambda.
 
 > data-provider --(http)--> adapter --(http scrape)--> datasource
 
