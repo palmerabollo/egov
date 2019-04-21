@@ -6,7 +6,9 @@ export type TrafficRadar = {
   type: string; // XXX enum
   sense: string; // XXX enum
   kilometers: [number];
-  maxSpeed: number;
+  maxSpeed?: number;
+  longitude?: number;
+  latitude?: number;
 };
 
 interface ITrafficRadarService {

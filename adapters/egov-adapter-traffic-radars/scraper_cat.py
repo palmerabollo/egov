@@ -3,6 +3,7 @@ import re
 
 from datetime import datetime
 from utils import timeit
+from geoutils import geolocate
 
 BASE_URL = "http://transit.gencat.cat/ca/seguretat_viaria/cinemometre_fixos_mobils_catalunya/"
 
@@ -68,8 +69,6 @@ def scrape():
         BASE_URL,
         header=0)
 
-    print(len(tables))
-
     if len(tables) != 3:  # fixed, mobile, stretch
         raise Exception("Unexpected data found in the source document")
 
@@ -83,8 +82,15 @@ def scrape():
     radars.extend(stretch)
     radars.extend(mobile)
 
-    return radars
+    # XXX pythonize this code
+    for radar in radars:
+        if radar["kilometers"]:
+            location = geolocate(radar["roadName"], radar["kilometers"][0])
+            if location:
+                radar["longitude"] = location[0]
+                radar["latitude"] = location[1]
 
+    return radars
 
 
 ADMIN_NAMES={

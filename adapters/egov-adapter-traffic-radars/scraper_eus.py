@@ -2,6 +2,7 @@ import pandas as pd
 
 from datetime import datetime
 from utils import timeit
+from geoutils import geolocate
 
 BASE_URL = "https://www.trafikoa.eus/wps/portal/trafico/!ut/p/z0/04_Sj9CPykssy0xPLMnMz0vMAfIjo8ziXTycTI2CzdwsLU2cvVwNXFzdjQwgQD84tVi_INtREQACSLYJ/"
 
@@ -20,6 +21,11 @@ def table_to_radars(table):
             "kilometers": [ float(row.values[1]) ],
             "updatedAt": datetime.now().replace(microsecond=0).isoformat()
         }
+
+        location = geolocate(radar["roadName"], radar["kilometers"][0])
+        if location:
+            radar["longitude"] = location[0]
+            radar["latitude"] = location[1]
 
         try:
             radar["maxSpeed"] = int(row.values[5].split()[0])

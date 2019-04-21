@@ -9,6 +9,7 @@ import * as path from 'path';
 
 import { DataSource } from 'apollo-datasource';
 import { ApolloServer, gql } from 'apollo-server';
+import { GraphQLFormattedError } from 'graphql';
 
 // XXX use a schema validator at lint time https://github.com/cjoudrey/graphql-schema-linter
 const schema = fs.readFileSync(path.join(__dirname, 'schema.graphql')).toString();
@@ -66,6 +67,12 @@ const server = new ApolloServer({
     postalCodeService: new egov.PostalCodeService() as DataSource<any>,
     trafficRadarService: new egov.TrafficRadarService() as DataSource<any>
   }),
+  formatError: error => {
+    logops.error(error);
+    return {
+      message: 'Internal Server Error. Report it to help us fix the issue.'
+    } as GraphQLFormattedError;
+  },
   resolvers,
   tracing: process.env.NODE_ENV === 'development',
   typeDefs

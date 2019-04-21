@@ -18,6 +18,6 @@
   ],
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "serverless-python-requirements": "^4.3.0"
+    "serverless-python-requirements": "UnitedIncome/serverless-python-requirements#6b5e0e2"
   }
 }

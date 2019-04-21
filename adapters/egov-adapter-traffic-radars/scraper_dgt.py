@@ -8,6 +8,7 @@ from urllib.parse import urljoin
 from datetime import datetime
 from PyPDF2 import PdfFileReader
 from utils import timeit
+from geoutils import geolocate
 
 BASE_URL = "http://www.dgt.es/es/el-trafico/control-de-velocidad/"
 TEXT_LINK_DOWNLOAD = "aquí"
@@ -82,6 +83,14 @@ def tables_to_radars(tables):
             else:
                 radar["kilometers"].append(float(row.values[3]))
 
+            # XXX in radars with 2 senses (BOTH), taking the first position might not be accurate
+            location = geolocate(radar["roadName"], radar["kilometers"][0])
+            if location:
+                radar["longitude"] = location[0]
+                radar["latitude"] = location[1]
+            else:
+                print("Not able to geolocate radar {} {}".format(radar["roadName"], radar["kilometers"]))
+
             radars.append(radar)
 
     return radars
@@ -100,7 +109,7 @@ def scrape():
     # We failed and we now run the scraping as a scheduled function.
     # Notice that multiprocessing.Queue does not work in AWS lambda
 
-    pages_per_process = 2
+    pages_per_process = 4
     procs = []
     parent_conns = []
     for page in range(1, pages, pages_per_process):
