@@ -16,6 +16,9 @@ def upload(data):
             CreateBucketConfiguration={ "LocationConstraint": REGION })
     except client.exceptions.BucketAlreadyOwnedByYou:
         pass
+    except client.exceptions.BucketAlreadyExists:
+        print("BucketAlreadyExists: review your AWS credentials")
+        raise
 
     client.put_object(
         Bucket=BUCKET,

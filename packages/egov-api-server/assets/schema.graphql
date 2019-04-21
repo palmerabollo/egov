@@ -156,6 +156,20 @@ type TrafficRadar {
   sense: TrafficRadarSense!
 
   """
+  Longitude in degrees (wgs84) where the radar is located.
+  Available when the kilometer in the road is known.
+  Still not very accurate in radars with BOTH senses.
+  """
+  longitude: Float
+
+  """
+  Latitude in degrees (wgs84) where the radar is located.
+  Available when the kilometer in the road is known.
+  Still not very accurate in radars with BOTH senses.
+  """
+  latitude: Float
+
+  """
   The point in the road in kilometers.
   A radar can have up to two locations, one per sense in the road.
   These locations must be translated into geographical coordinates in the future.

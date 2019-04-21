@@ -79,6 +79,16 @@ serverless deploy
 
 # Restrictions found so far
 
+## Max function size (50 MB)
+
+With serverless, "Request must be smaller than 69905067 bytes for the UpdateFunctionCode operation".
+This is a restriction in functions with many third-party dependencies. The serverless plugin "serverless-python-requirements" comes with some handy features to deal with it.
+
+You can zip and upload it to S3. In this case the limit is 250MB.
+Packages suck as numpy, pandas, etc are quite big and often hit this limit.
+
+## API Gateway timeout (30 seconds)
+
 The Amazon API Gateway imposes a timeout of 30 seconds.
 
 This means that you need to gather the data, process it and send a HTTP response in less than 30 seconds.
