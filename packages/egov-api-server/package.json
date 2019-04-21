@@ -49,6 +49,7 @@
   "dependencies": {
     "@egov/data-providers": "^1.0.0",
     "apollo-server": "^2.4.8",
+    "fast-ratelimit": "^2.2.0",
     "graphql": "^14.2.1",
     "lodash": "^4.17.11",
     "logops": "^2.1.0"

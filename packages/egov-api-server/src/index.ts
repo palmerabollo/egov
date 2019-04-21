@@ -7,8 +7,10 @@ import * as fs from 'fs';
 import * as logops from 'logops';
 import * as path from 'path';
 
+import { FastRateLimit } from 'fast-ratelimit';
+
 import { DataSource } from 'apollo-datasource';
-import { ApolloServer, gql } from 'apollo-server';
+import { ApolloError, ApolloServer, gql } from 'apollo-server';
 import { GraphQLFormattedError } from 'graphql';
 
 // XXX use a schema validator at lint time https://github.com/cjoudrey/graphql-schema-linter
@@ -58,8 +60,24 @@ const resolvers = {
   }
 };
 
+// threshold defines the available tokens over timespan (ttl)
+const rateLimiter = new FastRateLimit({
+  threshold: 10,
+  ttl: 60
+});
+
 const server = new ApolloServer({
   cacheControl: true,
+  context: async ({ req }) => {
+    const token = req.headers.authorization; // TODO use JWT tokens
+    try {
+      await rateLimiter.consume(req.ip);
+      return { token };
+    } catch (e) {
+      logops.debug('Rate limit', req.ip);
+      throw new ApolloError('Rate limit (10 req/min). Please wait. Request an API key to increase this limit.', 'TOO_MANY_REQUESTS');
+    }
+  },
   dataSources: () => ({
     antennaService: new egov.AntennaService() as DataSource<any>,
     digitalTelevisionService: new egov.DigitalTelevisionService() as DataSource<any>,
@@ -68,10 +86,12 @@ const server = new ApolloServer({
     trafficRadarService: new egov.TrafficRadarService() as DataSource<any>
   }),
   formatError: error => {
-    logops.error(error);
-    return {
-      message: 'Internal Server Error. Report it to help us fix the issue.'
-    } as GraphQLFormattedError;
+    if (error.extensions.code === 'TOO_MANY_REQUESTS') {
+      return { message: error.message } as GraphQLFormattedError;
+    } else {
+      logops.warn(error);
+      return { message: 'Internal Server Error. Report it to help us fix the issue.' } as GraphQLFormattedError;
+    }
   },
   resolvers,
   tracing: process.env.NODE_ENV === 'development',
