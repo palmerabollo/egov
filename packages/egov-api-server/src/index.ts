@@ -71,7 +71,9 @@ const server = new ApolloServer({
   context: async ({ req }) => {
     const token = req.headers.authorization; // TODO use JWT tokens
     try {
-      await rateLimiter.consume(req.ip);
+      if (req.ip !== '127.0.0.1') {
+        await rateLimiter.consume(req.ip);
+      }
       return { token };
     } catch (e) {
       logops.debug('Rate limit', req.ip);
