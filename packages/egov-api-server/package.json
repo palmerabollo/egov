@@ -12,10 +12,10 @@
     "assets": "cp -R assets/* lib",
     "build": "tsc && npm run assets",
     "clean": "rimraf ./lib",
-    "lint": "tslint -p .",
+    "lint": "npx tslint -p .",
     "prebuild": "npm run clean",
     "prepublish": "npm run build",
-    "test": "jest --coverage --verbose --testEnvironment node",
+    "test": "npx jest --coverage --verbose --testEnvironment node",
     "watch": "npm-run-all --parallel watch:*",
     "watch:ts": "tsc -w",
     "watch:js": "nodemon lib/index.js"
