@@ -12,10 +12,10 @@
     "assets": "cp -R assets/* lib",
     "build": "tsc && npm run assets",
     "clean": "rimraf ./lib",
-    "lint": "npx tslint -p .",
+    "lint": "tslint -p .",
     "prebuild": "npm run clean",
     "prepublish": "npm run build",
-    "test": "npx jest --coverage --verbose --testEnvironment node",
+    "test": "jest --coverage --verbose --testEnvironment node",
     "watch": "npm-run-all --parallel watch:*",
     "watch:ts": "tsc -w",
     "watch:js": "nodemon lib/index.js"
@@ -49,8 +49,8 @@
   "dependencies": {
     "@egov/data-providers": "^1.0.0",
     "apollo-server": "^2.4.8",
-    "fast-ratelimit": "^2.2.0",
     "graphql": "^14.2.1",
+    "lambda-rate-limiter": "^2.4.12",
     "lodash": "^4.17.11",
     "logops": "^2.1.0"
   },
