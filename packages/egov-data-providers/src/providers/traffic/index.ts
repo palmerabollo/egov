@@ -25,7 +25,7 @@ export class TrafficRadarService implements ITrafficRadarService {
   public async findTrafficRadars(): Promise<TrafficRadar[]> {
     const requester = axios.default.create({
       baseURL: this.URL_ADAPTER,
-      timeout: 5000
+      timeout: 10000 // should be much faster (<500ms) but lambda cold starts are slow sometimes
     });
 
     const response = await requester.request({});
