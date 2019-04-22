@@ -7,8 +7,6 @@ import * as fs from 'fs';
 import * as logops from 'logops';
 import * as path from 'path';
 
-import { FastRateLimit } from 'fast-ratelimit';
-
 import { DataSource } from 'apollo-datasource';
 import { ApolloError, ApolloServer, gql } from 'apollo-server';
 import { GraphQLFormattedError } from 'graphql';
@@ -60,10 +58,13 @@ const resolvers = {
   }
 };
 
-// threshold defines the available tokens over timespan (ttl)
-const rateLimiter = new FastRateLimit({
-  threshold: 10,
-  ttl: 60
+const MAX_REQUESTS_PER_INTERVAL = 5;
+
+// basic rate limiter until https://github.com/valeriansaliou/node-fast-ratelimit/issues/13 is fixed
+// tslint:disable-next-line:no-var-requires
+const rateLimiter = require('lambda-rate-limiter')({
+  interval: 60000,
+  uniqueTokenPerInterval: 1000  // lru
 });
 
 const server = new ApolloServer({
@@ -72,12 +73,14 @@ const server = new ApolloServer({
     const token = req.headers.authorization; // TODO use JWT tokens
     try {
       if (req.ip !== '127.0.0.1') {
-        await rateLimiter.consume(req.ip);
+        await rateLimiter.check(MAX_REQUESTS_PER_INTERVAL, req.ip);
       }
       return { token };
     } catch (e) {
       logops.debug('Rate limit', req.ip);
-      throw new ApolloError('Rate limit (10 req/min). Please wait. Request an API key to increase this limit.', 'TOO_MANY_REQUESTS');
+      throw new ApolloError(
+        `Rate limit exceeded (${MAX_REQUESTS_PER_INTERVAL} req/min). Please wait. Request an API key to increase this limit.`,
+        'TOO_MANY_REQUESTS');
     }
   },
   dataSources: () => ({
