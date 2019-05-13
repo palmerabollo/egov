@@ -79,7 +79,8 @@ const server = new ApolloServer({
     } catch (e) {
       logops.debug('Rate limit', req.ip);
       throw new ApolloError(
-        `Rate limit exceeded (${MAX_REQUESTS_PER_INTERVAL} req/min). Please wait. Request an API key to increase this limit.`,
+        `Rate limit exceeded (${MAX_REQUESTS_PER_INTERVAL} req/min). Please wait.` +
+        `Request an API key at https://github.com/palmerabollo/egov/issues/new to increase this limit.`,
         'TOO_MANY_REQUESTS');
     }
   },
@@ -95,7 +96,9 @@ const server = new ApolloServer({
       return { message: error.message } as GraphQLFormattedError;
     } else {
       logops.warn(error);
-      return { message: 'Internal Server Error. Report it to help us fix the issue.' } as GraphQLFormattedError;
+      return {
+        message: 'Internal Server Error. Report it at https://github.com/palmerabollo/egov/issues/new to help us fix the issue.'
+      } as GraphQLFormattedError;
     }
   },
   resolvers,
