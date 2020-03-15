@@ -94,7 +94,7 @@ Hay una [prueba de concepto para obtener los radares de tráfico](./adapters/ego
 
 > data-provider --(http)--> adapter --(http scrape)--> datasource
 
-¿Por qué serverles? Porque es la manera de hacer el proyecto económicamente sostenible, sin tener que pedir dinero por ahora.
+¿Por qué serverless? Porque es la manera de hacer el proyecto económicamente sostenible, sin tener que pedir dinero por ahora.
 
 # LICENSE
 
