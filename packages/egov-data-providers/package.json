@@ -44,7 +44,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "iconv-lite": "^0.4.24",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "readline-sync": "^1.4.9",
     "string-similarity": "^3.0.0"
   },
