@@ -4,4 +4,4 @@ requests==2.21.0
 opencv-python-headless==4.1.0.25
 boto3==1.9.132
 pandas==0.24.2
-lxml==4.6.2
+lxml==4.6.5
