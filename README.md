@@ -47,6 +47,8 @@ npm run start:api-server
 
 En http://localhost:4000 tendrás la interfaz web de acceso al API GraphQL para ejecutar tus consultas. Si te apetece cacharrear, hay más detalles sobre el proceso de desarrollo en la [guía para colaboradores](./CONTRIBUTING.md).
 
+> Nota: algunas administraciones tienen servidores inseguros, afectados por vulnerabilidades (CVE-2009-3555) desde hace más de una década. Esto impide el soporte de Node.js >16 / OpenSSL 3.x. Hay que investigar si se puede ignorar con la variable `SSL_OP_LEGACY_SERVER_CONNECT`.
+
 ## egov-data-providers
 
 Incluye la implementación de los proveedores de datos: servicios de consulta que extraen datos de fuentes públicas. Algunos servicios consultan datos cuando se solicitan (online) y otros utilizan datos locales (offline).
