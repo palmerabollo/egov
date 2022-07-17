@@ -18,7 +18,7 @@
     "deploy:adapters": "bin/deploy-adapters"
   },
   "engines": {
-    "node": ">=10,<17"
+    "node": "16"
   },
   "keywords": [
     "egov",
