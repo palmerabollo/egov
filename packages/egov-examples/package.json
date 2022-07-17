@@ -34,13 +34,13 @@
   "author": "Guido García (@palmerabollo)",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "readline-sync": "^1.4.9",
+    "readline-sync": "^1.4.10",
     "@egov/data-providers": "^1.0.0"
   },
   "devDependencies": {
-    "@types/readline-sync": "^1.4.3",
-    "rimraf": "^2.6.3",
-    "tslint": "^5.16.0",
-    "typescript": "^3.9.10"
+    "@types/readline-sync": "^1.4.4",
+    "rimraf": "^2.7.1",
+    "tslint": "^5.20.1",
+    "typescript": "^4.7.4"
   }
 }
