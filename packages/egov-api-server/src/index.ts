@@ -72,7 +72,6 @@ const rateLimiter = require('lambda-rate-limiter')({
 });
 
 const server = new ApolloServer({
-  cacheControl: true,
   context: async ({ req }) => {
     const token = req.headers.authorization; // TODO use JWT tokens
     try {
@@ -107,7 +106,6 @@ const server = new ApolloServer({
     }
   },
   resolvers,
-  tracing: process.env.NODE_ENV === 'development',
   typeDefs
 });
 

@@ -1,4 +1,18 @@
 """
+see https://www.apollographql.com/docs/apollo-server/performance/caching/#in-your-schema-static
+"""
+enum CacheControlScope {
+  PUBLIC
+  PRIVATE
+}
+
+directive @cacheControl(
+  maxAge: Int
+  scope: CacheControlScope
+  inheritMaxAge: Boolean
+) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
+
+"""
 Information about a geographical location based on a postal code.
 The same postal code can belong to different places and one place can have many postal codes.
 """

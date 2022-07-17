@@ -48,8 +48,8 @@
   },
   "dependencies": {
     "@egov/data-providers": "^1.0.0",
-    "apollo-server": "^2.25.4",
-    "graphql": "^14.7.0",
+    "apollo-server": "^3.10.0",
+    "graphql": "^16.5.0",
     "lambda-rate-limiter": "^2.4.37",
     "lodash": "^4.17.21",
     "logops": "^2.1.2"
