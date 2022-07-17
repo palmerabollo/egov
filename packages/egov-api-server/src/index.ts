@@ -38,6 +38,10 @@ const resolvers = {
     postalCode: async (parent, args, context) => {
       const postalCodeService = context.dataSources.postalCodeService;
       return await postalCodeService.findByPostalCode(args.postalCode);
+    },
+    vehicle: async (parent, args, context) => {
+      const trafficVehicleService = context.dataSources.trafficVehicleService;
+      return await trafficVehicleService.findByNumberPlate(args.numberPlate);
     }
   },
   RadioInformation: {
@@ -89,7 +93,8 @@ const server = new ApolloServer({
     digitalTelevisionService: new egov.DigitalTelevisionService() as DataSource<any>,
     networkService: new egov.NetworkService() as DataSource<any>,
     postalCodeService: new egov.PostalCodeService() as DataSource<any>,
-    trafficRadarService: new egov.TrafficRadarService() as DataSource<any>
+    trafficRadarService: new egov.TrafficRadarService() as DataSource<any>,
+    trafficVehicleService: new egov.TrafficVehicleService() as DataSource<any>
   }),
   formatError: error => {
     if (error.extensions.code === 'TOO_MANY_REQUESTS') {

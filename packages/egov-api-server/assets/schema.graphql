@@ -182,6 +182,36 @@ type TrafficRadar {
 }
 
 """
+Different types of environmental labels for vehicles used in Spain.
+"""
+enum EnvironmentalLabel {
+  ZERO
+  ECO
+  C
+  B
+  A
+
+  "Less sustainable vehicles do not have a label because they damage the environment."
+  NONE
+}
+
+"""
+Any kind of vehicle with a number plate.
+"""
+type TrafficVehicle {
+  """
+  The number plate or licence plate.
+  It is unique, the same number plate cannot be shared by two different vehicles.
+  """
+  numberPlate: String!
+
+  """
+  Environmental label that indicates how sustainable a vehicle is.
+  """
+  environmentalLabel: EnvironmentalLabel!
+}
+
+"""
 Defines a point of interest.
 """
 union PointOfInterest = TrafficRadar
@@ -198,4 +228,9 @@ type Query {
   Get information about geographical places that have a specific postal code.
   """
   postalCode(postalCode: String!): [PostalCode]!
+
+  """
+  Get information about vehicles with a given number plate.
+  """
+  vehicle(numberPlate: String!): TrafficVehicle @cacheControl(maxAge: 600)
 }
