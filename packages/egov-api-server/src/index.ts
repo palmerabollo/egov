@@ -9,6 +9,7 @@ import * as path from 'path';
 
 import { DataSource } from 'apollo-datasource';
 import { ApolloError, ApolloServer, gql } from 'apollo-server';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import { GraphQLFormattedError } from 'graphql';
 
 // XXX use a schema validator at lint time https://github.com/cjoudrey/graphql-schema-linter
@@ -106,7 +107,10 @@ const server = new ApolloServer({
     }
   },
   resolvers,
-  typeDefs
+  typeDefs,
+  plugins: [
+    ApolloServerPluginLandingPageGraphQLPlayground()
+  ]
 });
 
 server.listen(process.env.PORT || 4000, process.env.HOST || '0.0.0.0').then(({ url }) => {
